@@ -1,0 +1,1 @@
+# Dolphin_emu_Appimage
