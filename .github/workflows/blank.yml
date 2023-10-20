@@ -44,11 +44,7 @@ jobs:
           mkdir $HOME/lucas
           mv AppRun $HOME/lucas/
           cd ./dolphin-emu
-          git add *
-          git stash
-          git pull
           git submodule update --init --recursive
-          git checkout tags/5.0
           mkdir Build && cd Build
           cmake .. -DCMAKE_INSTALL_PREFIX="$HOME/lucas/"
 
