@@ -61,4 +61,3 @@ jobs:
           draft: false
           files: /home/runner/work/Dolphin_emu_Appimage/*.AppImage*
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          echo test, and deploy your project.
