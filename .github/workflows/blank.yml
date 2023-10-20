@@ -1,0 +1,64 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on:
+  # Build at 00:00 on every 12th day-of-month.
+  schedule:
+    - cron: "0 0 */12 * *"
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ main ]
+    paths-ignore: [ '**/README.md' ]
+  pull_request:
+    branches: [ main ]
+    paths-ignore: [ '**/README.md' ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build-stable"
+  build-stable:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-18.04
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Prerequisites
+        run: |
+          sudo apt update && sudo apt install libfuse2 -y && sudo apt install --no-install-recommends ca-certificates qt6-base-dev qt6-base-private-dev libqt6svg6-dev git cmake make gcc g++ pkg-config libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libxi-dev libxrandr-dev libudev-dev libevdev-dev libsfml-dev libminiupnpc-dev libmbedtls-dev libcurl4-openssl-dev libhidapi-dev libsystemd-dev libbluetooth-dev libasound2-dev libpulse-dev libpugixml-dev libbz2-dev libzstd-dev liblzo2-dev libpng-dev libusb-1.0-0-dev gettext && sudo apt install git
+          wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O linuxdeploy ; chmod a+x linuxdeploy
+          wget -q "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
+          wget -q "https://github.com/AppImage/AppImageKit/releases/download/continuous/AppRun-x86_64" -O AppRun ; chmod a+x AppRun
+          git clone https://github.com/dolphin-emu/dolphin.git dolphin-emu
+          mkdir $HOME/lucas
+          mv AppRun $HOME/lucas/
+          cd ./dolphin-emu
+          git submodule update --init --recursive
+          git checkout tags/5.0
+          mkdir Build && cd Build
+          cmake .. -DCMAKE_INSTALL_PREFIX="$HOME/lucas/"
+
+      # Runs a set of commands using the runners shell
+      - name: Build appimage
+        run: |
+         
+          ./linuxdeploy --appdir lucas
+          ARCH=x86_64 ./appimagetool -n lucas/
+
+      - name: release
+        uses: "marvinpinto/action-automatic-releases@6273874b61ebc8c71f1a61b2d98e234cf389b303"
+        with:
+          title: Continuous build
+          automatic_release_tag: continuous-stable
+          prerelease: false
+          draft: false
+          files: /home/runner/work/Dolphin_emu_Appimage/*.AppImage*
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          echo test, and deploy your project.
