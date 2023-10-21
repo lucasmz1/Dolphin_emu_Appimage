@@ -56,7 +56,7 @@ jobs:
         run: |
          
           ./linuxdeploy --appdir $HOME/lucas/
-          ARCH=x86_64 ./appimagetool -n lucas/
+          ARCH=x86_64 ./appimagetool -n $HOME/lucas/
 
       - name: release
         uses: "marvinpinto/action-automatic-releases@6273874b61ebc8c71f1a61b2d98e234cf389b303"
