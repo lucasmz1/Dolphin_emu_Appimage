@@ -44,13 +44,14 @@ jobs:
           wget -q "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
           wget -q "https://github.com/AppImage/AppImageKit/releases/download/continuous/AppRun-x86_64" -O AppRun ; chmod a+x AppRun
           git clone https://github.com/dolphin-emu/dolphin.git dolphin-emu
-          mkdir $HOME/lucas 
+          mkdir $HOME/lucas/ 
           cp dolphin-emu.desktop dolphin-emu.png $HOME/lucas/
-          mv AppRun $HOME/lucas/
+          cp AppRun $HOME/lucas/
           cd ./dolphin-emu
           git submodule update --init --recursive
           mkdir Build && cd Build
           cmake .. -DCMAKE_INSTALL_PREFIX="$HOME/lucas/"
+          make install
 
       # Runs a set of commands using the runners shell
       - name: Build appimage
