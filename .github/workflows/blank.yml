@@ -50,7 +50,7 @@ jobs:
           cd ./dolphin-emu
           git submodule update --init --recursive
           mkdir Build && cd Build
-          cmake .. -DCMAKE_INSTALL_PREFIX="$HOME/lucas/"
+          cmake .. -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/"
           make install
           cd ..
 
