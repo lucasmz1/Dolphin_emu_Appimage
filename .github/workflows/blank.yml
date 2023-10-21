@@ -50,7 +50,7 @@ jobs:
           cd ./dolphin-emu
           git submodule update --init --recursive
           mkdir Build && cd Build
-          cmake .. -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/"
+          cmake .. -j4 -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/"
           make install
           cd ..
           cd ..
@@ -61,14 +61,6 @@ jobs:
          
           ./linuxdeploy --appdir lucas/
           ARCH=x86_64 ./appimagetool -n lucas/
-
-          - name: Download a Build Artifact
-            uses: actions/download-artifact@v3.0.2
-            with:
-            # Artifact name
-            name: # optional
-            # Destination path
-            path: # optional
 
       - name: release
         uses: "marvinpinto/action-automatic-releases@6273874b61ebc8c71f1a61b2d98e234cf389b303"
