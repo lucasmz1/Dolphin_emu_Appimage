@@ -44,23 +44,30 @@ jobs:
           wget -q "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
           wget -q "https://github.com/AppImage/AppImageKit/releases/download/continuous/AppRun-x86_64" -O AppRun ; chmod a+x AppRun
           git clone https://github.com/dolphin-emu/dolphin.git dolphin-emu
-          mkdir $HOME/lucas/ 
-          cp dolphin-emu.desktop dolphin-emu.png $HOME/lucas/
-          cp AppRun $HOME/lucas/
+          mkdir lucas/
+          cp dolphin-emu.desktop dolphin-emu.png lucas/
+          cp AppRun lucas/
           cd ./dolphin-emu
           git submodule update --init --recursive
           mkdir Build && cd Build
           cmake .. -DCMAKE_INSTALL_PREFIX="$HOME/lucas/"
           make install
+          cd ..
 
       # Runs a set of commands using the runners shell
       - name: Build appimage
         run: |
          
-          ./linuxdeploy --appdir $HOME/lucas/
-          ARCH=x86_64 ./appimagetool -n $HOME/lucas/
-          find $HOME -name '**.AppImage**' | xargs -i -t -exec mv {} $HOME
-          pwd
+          ./linuxdeploy --appdir lucas/
+          ARCH=x86_64 ./appimagetool -n lucas/
+
+          - name: Download a Build Artifact
+            uses: actions/download-artifact@v3.0.2
+            with:
+            # Artifact name
+            name: # optional
+            # Destination path
+            path: # optional
 
       - name: release
         uses: "marvinpinto/action-automatic-releases@6273874b61ebc8c71f1a61b2d98e234cf389b303"
