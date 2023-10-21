@@ -56,7 +56,7 @@ jobs:
       - name: Build appimage
         run: |
          
-          ./linuxdeploy --appdir $HOME/lucas/
+          ./linuxdeploy -v --appdir $HOME/lucas/
           ARCH=x86_64 ./appimagetool -n $HOME/lucas/
 
       - name: release
@@ -66,5 +66,5 @@ jobs:
           automatic_release_tag: continuous-stable
           prerelease: false
           draft: false
-          files: $HOME/Dolphin-*.AppImage*
+          files: $HOME/*.AppImage*
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
