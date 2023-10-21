@@ -66,5 +66,5 @@ jobs:
           automatic_release_tag: continuous-stable
           prerelease: false
           draft: false
-          files: $HOME*.AppImage*
+          files: .$HOME/Dolphin-*.AppImage*
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
