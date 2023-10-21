@@ -56,7 +56,7 @@ jobs:
       - name: Build appimage
         run: |
          
-          ./linuxdeploy -v --appdir $HOME/lucas/
+          ./linuxdeploy --appdir $HOME/lucas/
           ARCH=x86_64 ./appimagetool -n $HOME/lucas/
 
       - name: release
