@@ -66,5 +66,5 @@ jobs:
           automatic_release_tag: continuous-stable
           prerelease: false
           draft: false
-          files: /home/runner/work/Dolphin_emu_Appimage/*.AppImage*
+          files: $HOME*.AppImage*
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
