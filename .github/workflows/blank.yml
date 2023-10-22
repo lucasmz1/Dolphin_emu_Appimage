@@ -60,7 +60,7 @@ jobs:
           cd ./dolphin-emu
           git submodule update --init --recursive
           mkdir Build && cd Build
-          sudo cmake .. -DLINUX_LOCAL_DEV=true -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
+          cmake .. -DLINUX_LOCAL_DEV=true -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
           make install
           cd ..
           cd ..
