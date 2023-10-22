@@ -23,7 +23,7 @@ jobs:
   # This workflow contains a single job called "build-stable"
   build-stable:
     # The type of runner that the job will run on
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-20.04
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -32,6 +32,7 @@ jobs:
 
       - name: Prerequisites
         run: |
+          sudo apt update && sudo apt upgrade -y
           sudo add-apt-repository ppa:okirby/qt6-backports -y
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
