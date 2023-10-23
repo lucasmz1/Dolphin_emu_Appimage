@@ -32,6 +32,7 @@ jobs:
 
       - name: Prerequisites
         run: |
+          sudo apt remove --pruge gcc-9* -y && sudo apt autoremove
           sudo add-apt-repository ppa:okirby/qt6-backports -y
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
