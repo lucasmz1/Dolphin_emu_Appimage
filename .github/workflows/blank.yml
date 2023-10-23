@@ -32,7 +32,6 @@ jobs:
 
       - name: Prerequisites
         run: |
-          sudo apt update && sudo apt upgrade -y
           sudo add-apt-repository ppa:okirby/qt6-backports -y
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
@@ -43,12 +42,6 @@ jobs:
           sudo apt install --no-install-recommends ca-certificates qt6-base-dev qt6-base-private-dev libqt6svg6-dev git cmake make g++-13 gcc-13 pkg-config libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libxi-dev libxrandr-dev libudev-dev libevdev-dev libsfml-dev libminiupnpc-dev libmbedtls-dev libcurl4-openssl-dev libhidapi-dev libsystemd-dev libbluetooth-dev libasound2-dev libpulse-dev libpugixml-dev libbz2-dev libzstd-dev liblzo2-dev libpng-dev libusb-1.0-0-dev gettext -y
           sudo apt install git -y
           sudo apt install libstdc++6 -y
-          version=$(apt-cache pkgnames | sed -nr 's/^gcc-(([0-9]+\.?)+)$/\1/p' \
-                             | sort -n | tail -n1)
-          echo "The latest available GCC version: $version"
-          sudo apt-get install gcc-$version g++-$version
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$version 60 \
-          --slave   /usr/bin/g++ g++ /usr/bin/g++-$version
           wget -c https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           sudo ./llvm.sh 17
@@ -66,7 +59,7 @@ jobs:
           cd ./dolphin-emu
           git submodule update --init --recursive
           mkdir Build && cd Build
-          cmake .. -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DLINUX_LOCAL_DEV=true -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
+          cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_FLAGS=-stdlib=libc++ -DLINUX_LOCAL_DEV=true -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
           make install
           cd ..
           cd ..
