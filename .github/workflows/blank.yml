@@ -48,7 +48,13 @@ jobs:
           echo "The latest available GCC version: $version"
           sudo apt-get install gcc-$version g++-$version
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$version 60 \
-                         --slave   /usr/bin/g++ g++ /usr/bin/g++-$version
+          --slave   /usr/bin/g++ g++ /usr/bin/g++-$version
+          wget -c https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 17
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-17 100
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-17 100
+          sudo update-alternatives --config cc
           wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O linuxdeploy ; chmod a+x linuxdeploy
           wget -q "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
           wget -q "https://github.com/AppImage/AppImageKit/releases/download/continuous/AppRun-x86_64" -O AppRun ; chmod a+x AppRun
@@ -60,7 +66,7 @@ jobs:
           cd ./dolphin-emu
           git submodule update --init --recursive
           mkdir Build && cd Build
-          cmake .. -DLINUX_LOCAL_DEV=true -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
+          cmake .. -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DLINUX_LOCAL_DEV=true -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
           make install
           cd ..
           cd ..
