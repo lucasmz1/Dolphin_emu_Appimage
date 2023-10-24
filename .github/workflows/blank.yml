@@ -42,7 +42,7 @@ jobs:
           sudo apt update && sudo apt install libfuse2 -y
           sudo apt install --no-install-recommends ca-certificates qt6-base-dev qt6-base-private-dev libqt6svg6-dev git cmake make g++-13 gcc-13 pkg-config libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libxi-dev libxrandr-dev libudev-dev libevdev-dev libsfml-dev libminiupnpc-dev libmbedtls-dev libcurl4-openssl-dev libhidapi-dev libsystemd-dev libbluetooth-dev libasound2-dev libpulse-dev libpugixml-dev libbz2-dev libzstd-dev liblzo2-dev libpng-dev libusb-1.0-0-dev gettext -y
           sudo apt install git -y
-          sudo apt install libstdc++6 -y
+          sudo apt install libstdc++6 libc++-dev libc++abi-dev -y
                     version=$(apt-cache pkgnames | sed -nr 's/^gcc-(([0-9]+\.?)+)$/\1/p' \
                              | sort -n | tail -n1)
           echo "The latest available GCC version: $version"
@@ -62,7 +62,7 @@ jobs:
           cd ./dolphin-emu
           git submodule update --init --recursive
           mkdir Build && cd Build
-          cmake .. -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_FLAGS=-stdlib=libc++ -DLINUX_LOCAL_DEV=true -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
+          cmake .. -DLINUX_LOCAL_DEV=true -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
           make install
           cd ..
           cd ..
