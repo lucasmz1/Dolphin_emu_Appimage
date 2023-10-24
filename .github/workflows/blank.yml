@@ -55,6 +55,8 @@ jobs:
           git clone https://github.com/dolphin-emu/dolphin.git dolphin-emu
           mkdir lucas/
           mkdir lucas/usr/
+          mkdir lucas/usr/lib/
+          find /usr -name 'libqxcb**' | xargs -i -t -exec cp -Lr {} /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           cp dolphin-emu.desktop dolphin-emu.png lucas/
           cp AppRun lucas/
           cd ./dolphin-emu
