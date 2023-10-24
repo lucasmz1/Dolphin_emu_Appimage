@@ -51,7 +51,6 @@ jobs:
           --slave   /usr/bin/g++ g++ /usr/bin/g++-$version
           wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O linuxdeploy ; chmod a+x linuxdeploy
           wget -q "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
-          wget -q "https://github.com/AppImage/AppImageKit/releases/download/continuous/AppRun-x86_64" -O AppRun ; chmod a+x AppRun
           wget -q "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage" -O linuxdeployqt ; chmod a+x linuxdeployqt
           git clone https://github.com/dolphin-emu/dolphin.git dolphin-emu
           mkdir lucas/
@@ -59,8 +58,8 @@ jobs:
           mkdir lucas/usr/lib/
           find /usr -name 'libqxcb**' | xargs -i -t -exec cp -Lr {} /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
+          cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/ /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           cp dolphin-emu.desktop dolphin-emu.png AppRun lucas/
-          cp AppRun lucas/
           cd ./dolphin-emu
           git submodule update --init --recursive
           mkdir Build && cd Build
