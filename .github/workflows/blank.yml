@@ -57,6 +57,7 @@ jobs:
           mkdir lucas/usr/
           mkdir lucas/usr/lib/
           find /usr -name 'libqxcb**' | xargs -i -t -exec cp -Lr {} /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
+          cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           cp dolphin-emu.desktop dolphin-emu.png lucas/
           cp AppRun lucas/
           cd ./dolphin-emu
