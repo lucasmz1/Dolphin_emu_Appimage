@@ -63,7 +63,7 @@ jobs:
           git submodule update --init --recursive
           mkdir Build && cd Build
           cmake .. -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/" && make -j$(nproc)
-          sudo make install
+          make install
           cd ..
           cd ..
 
