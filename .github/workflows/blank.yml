@@ -64,7 +64,7 @@ jobs:
           mkdir Build && cd Build
           cmake .. -G Ninja -DENABLE_TESTS=OFF -Wno-dev -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
           ninja
-          cmake --install build
+          ninja install
           cd ..
           cd ..
 
