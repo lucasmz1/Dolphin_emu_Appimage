@@ -62,7 +62,7 @@ jobs:
           cd ./dolphin-emu
           git submodule update --init --recursive
           mkdir Build && cd Build
-          cmake .. -G Ninja -DENABLE_TESTS=OFF -DUSE_MGBA=ON -DUSE_SHARED_ENET=ON -Wno-dev -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
+          cmake .. -G Ninja -DENABLE_TESTS=OFF -DUSE_MGBA=ON -Wno-dev -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
           cmake --install build
           cd ..
           cd ..
