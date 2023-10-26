@@ -63,7 +63,7 @@ jobs:
           cd ./dolphin-emu
           git submodule update --init --recursive
           mkdir Build && cd Build
-          cmake .. -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/" && make -j$(nproc)
+          cmake .. -S dolphin-emu -B build -G Ninja -DENABLE_TESTS=OFF -DUSE_MGBA=ON -DUSE_SHARED_ENET=ON -Wno-dev -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/" && make -j$(nproc)
           make install
           cd ..
           cd ..
