@@ -50,7 +50,6 @@ jobs:
           --slave   /usr/bin/g++ g++ /usr/bin/g++-$version
           wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O linuxdeploy ; chmod a+x linuxdeploy
           wget -q "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
-          git fetch --prune --unshallow
           git clone https://github.com/dolphin-emu/dolphin.git dolphin-emu
           mkdir lucas/
           mkdir lucas/usr/
@@ -61,8 +60,10 @@ jobs:
           cp dolphin-emu.desktop dolphin-emu.png AppRun libunionpreload.so lucas/
           cd ./dolphin-emu
           git submodule update --init --recursive
+          git pull origin
+          git checkout tags/5.0
           mkdir Build && cd Build
-          cmake .. -G Ninja -DENABLE_TESTS=OFF -Wno-dev -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
+          cmake .. -G Ninja -DLINUX_LOCAL_DEV=true -DENABLE_TESTS=OFF -Wno-dev -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
           ninja
           ninja install
           cd ..
