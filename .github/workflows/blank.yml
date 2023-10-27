@@ -61,7 +61,7 @@ jobs:
           cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/ /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           cp dolphin-emu.desktop dolphin-emu.png AppRun libunionpreload.so lucas/
           cd ./dolphin-emu
-          git checkout tags/5.0-19870
+          git checkout tags/5.1.1
           git submodule update --init --recursive \
           Externals/mGBA \
           Externals/spirv_cross \
