@@ -78,7 +78,7 @@ jobs:
           Externals/fmt \
           && git pull --recurse-submodules
           mkdir Build && cd Build
-          cmake .. -G Ninja -DLINUX_LOCAL_DEV=true -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DENABLE_TESTS=OFF -Wno-dev -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
+          cmake .. -G Ninja -DLINUX_LOCAL_DEV=true -DCMAKE_C_COMPILER=clang-16 -DCMAKE_CXX_COMPILER=clang++-16 -DCMAKE_CXX_FLAGS=-stdlib=libc++ -DENABLE_TESTS=OFF -Wno-dev -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
           ninja
           ninja install
           cd ..
