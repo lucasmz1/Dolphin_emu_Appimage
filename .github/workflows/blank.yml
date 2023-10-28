@@ -16,7 +16,7 @@ jobs:
     - name: Checkout Upstream Repo
       uses: actions/checkout@v3
       with:
-        repository: Dolphin_emu_Appimage
+        repository: lucasmz1/Dolphin_emu_Appimage
         ref: master
 
     - name: Checkout Submodules
