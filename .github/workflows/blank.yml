@@ -29,32 +29,10 @@ jobs:
       with:
         repository: Dolphin_emu_Appimage
         ref: master
-
-    - name: Checkout Submodules
-      if: steps.cache-submodules.outputs.cache-hit != 'true'
-      run: git submodule update --init --recursive -j $(getconf _NPROCESSORS_ONLN)
-
-    - name: Checkout AppImage Repo
-      uses: actions/checkout@v3
-      with:
-          clean: false
-          path: ci
-
-    # Runs the Dolphin action
-    - name: Get Date
-      id: get-date
-      run: |
-        echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
-      shell: bash
-    - name: cache
-      uses: actions/cache@v3
-      with:
-        path: ~/.ccache
-        key: build-ccache-${{ steps.get-date.outputs.date }}
-        restore-keys: |
-          build-ccache-
-      env:
-        CCACHE_MAXSIZE: 200M
+        
+        steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+        - uses: actions/checkout@v3
 
     - name: Prerequisites
     run: |
