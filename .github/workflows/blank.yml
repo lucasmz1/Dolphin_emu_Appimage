@@ -85,7 +85,7 @@ jobs:
           cp dolphin-emu.desktop dolphin-emu.png AppRun libunionpreload.so lucas/
           cd ./dolphin-emu
           git submodule update --init --recursive -j $(getconf _NPROCESSORS_ONLN)
-          cmake .. -G ninja -DCMAKE_C_COMPILER=clang-16 -DCMAKE_CXX_COMPILER=clang++-16 -DENABLE_TESTS=OFF -Wno-dev -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/" && make
+          cmake .. -G ninja -DCMAKE_C_COMPILER=clang-16 -DCMAKE_CXX_COMPILER=clang++-16 -DENABLE_TESTS=OFF -Wno-dev -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
           ninja install
           cd ..
           cd ..
