@@ -18,7 +18,7 @@ jobs:
       with:
         repository: lucasmz1/Dolphin_emu_Appimage
         ref: master
-
+        
     - name: Checkout AppImage Repo
       uses: actions/checkout@v3
       with:
@@ -48,10 +48,6 @@ jobs:
         curl -sL https://raw.githubusercontent.com/qurious-pixel/yaqti/fetch/yaqti/fetchers.py -o $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/fetchers.py
         python -m yaqti install --os linux --platform desktop --version ${{ env.yaqti }} --modules gcc_64 --set-envs --install-deps
     
-    - name: Checkout Submodules
-      if: steps.cache-submodules.outputs.cache-hit != 'true'
-      run: git submodule update --init --recursive -j $(getconf _NPROCESSORS_ONLN)
-    
     - name: Install Packages
       run: |
         sudo apt-get install -y build-essential dialog dpkg libbluetooth-dev liblz4-dev liblzma-dev libssl-dev libopus-dev libpng-dev libsystemd-dev \
@@ -73,6 +69,10 @@ jobs:
         tar -xvf /tmp/patchelf.tar.gz --directory /tmp/ ./bin/patchelf --strip-components=2 
         sudo mv /tmp/patchelf /usr/bin
         patchelf --version
+        
+    - name: Checkout Submodules
+      if: steps.cache-submodules.outputs.cache-hit != 'true'
+      run: git submodule update --init --recursive -j $(getconf _NPROCESSORS_ONLN)
     - name: Build Dolphin
       run: |
         export Qt_DIR="${{github.workspace}}/qt/${{ env.yaqti }}/gcc_64/lib/cmake/Qt6"
