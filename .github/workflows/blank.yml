@@ -56,12 +56,12 @@ jobs:
       env:
         CCACHE_MAXSIZE: 200M
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
+      # Steps represent a sequence of tasks that will be executed as part of the job
+        steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+        - uses: actions/checkout@v3
 
-      - name: Prerequisites
+    - name: Prerequisites
         run: |
           curl -sLO https://files.pythonhosted.org/packages/47/42/351389ca36c7adfc5f4e92d086cdb2bdbde13f1b89ee882f4a1cab2183ac/yaqti-2021.7.29-py3-none-any.whl
           python3 -m pip install yaqti-2021.7.29-py3-none-any.whl
