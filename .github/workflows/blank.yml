@@ -19,7 +19,6 @@ on:
 jobs:
   # This workflow contains a single job called "build-stable"
   build-stable:
-  # The type of runner that the job will run on
     runs-on: ubuntu-20.04
     env:
       yaqti: 6.6.0
@@ -97,7 +96,7 @@ jobs:
           cd ..
 
       # Runs a set of commands using the runners shell
-      - name: Build appimage
+    - name: Build appimage
         run: |
 
           ./linuxdeploy --appdir lucas/
