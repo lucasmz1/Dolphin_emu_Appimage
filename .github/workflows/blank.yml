@@ -55,13 +55,6 @@ jobs:
         libbz2-dev liblzo2-dev libxi-dev libavcodec-dev libudev-dev libusb-1.0-0-dev libevdev-dev libc6-dev libhidapi-dev libavformat-dev libavdevice-dev \
         libfmt-dev libwayland-dev libxrandr-dev libglu1-mesa-dev libcurl4-openssl-dev x11-utils zenity wget curl git gettext ccache make cmake ninja-build \
         libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-icccm4 libxcb-image0-dev libxcb-cursor-dev
-    - name: Dolphin-Build Number
-      run: |
-        export LASTCOMMIT=$(git log --pretty=format:%H -1)
-        export DOLPHINVER=$(wget -qO- https://dolphin-emu.org/download/dev/${LASTCOMMIT} | grep '<title>' | awk '{print $NF}' | cut -d '<' -f 1)
-        echo "DOLPHIN Build $DOLPHINVER"
-        echo "DOLPHINVER=$DOLPHINVER" >> $GITHUB_ENV
-        sed -i "s|\${DOLPHIN_WC_DESCRIBE}|$DOLPHINVER|g" Source/Core/Common/scmrev.h.in
     - name: Update Patchelf
       run: |
         PATCHELFVER=0.14.5
