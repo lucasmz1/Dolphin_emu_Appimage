@@ -92,8 +92,6 @@ jobs:
           cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/ /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           cp dolphin-emu.desktop dolphin-emu.png AppRun libunionpreload.so lucas/
-          export Qt_DIR="${{github.workspace}}/qt/${{ env.yaqti }}/gcc_64/lib/cmake/Qt6"
-          mkdir -p "$HOME/.ccache"
           cd ./dolphin-emu
           git submodule update --init --recursive -j $(getconf _NPROCESSORS_ONLN)
           cmake .. -DCMAKE_C_COMPILER=clang-16 -DCMAKE_CXX_COMPILER=clang++-16 -DENABLE_TESTS=OFF -Wno-dev -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/" && make
