@@ -41,11 +41,6 @@ jobs:
           pyver=$(python3 --version | awk '{print $2}')
           curl -sL https://raw.githubusercontent.com/qurious-pixel/yaqti/fetch/yaqti/fetchers.py -o $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/fetchers.py
           python -m yaqti install --os linux --platform desktop --version ${{ env.yaqti }} --modules gcc_64 --set-envs --install-deps
-          curl -sLO https://files.pythonhosted.org/packages/47/42/351389ca36c7adfc5f4e92d086cdb2bdbde13f1b89ee882f4a1cab2183ac/yaqti-2021.7.29-py3-none-any.whl
-          python3 -m pip install yaqti-2021.7.29-py3-none-any.whl
-          pyver=$(python3 --version | awk '{print $2}')
-          curl -sL https://raw.githubusercontent.com/qurious-pixel/yaqti/fetch/yaqti/fetchers.py -o $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/fetchers.py
-          python -m yaqti install --os linux --platform desktop --version ${{ env.yaqti }} --modules gcc_64 --set-envs --install-deps
           sudo apt-get install -y build-essential dialog dpkg libbluetooth-dev liblz4-dev liblzma-dev libssl-dev libopus-dev libpng-dev libsystemd-dev \
           libzip-dev libzstd-dev zlib1g-dev libasound2-dev libpulse-dev pulseaudio p7zip p7zip-full libsfml-dev libminiupnpc-dev libmbedtls-dev libpugixml-dev \
           libbz2-dev liblzo2-dev libxi-dev libavcodec-dev libudev-dev libusb-1.0-0-dev libevdev-dev libc6-dev libhidapi-dev libavformat-dev libavdevice-dev \
