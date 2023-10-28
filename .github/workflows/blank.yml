@@ -30,9 +30,14 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-
-      - name: Prerequisites
+    - name: cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.ccache
+        key: build-ccache-${{ steps.get-date.outputs.date }}
+        restore-keys: |
+          build-ccache-
+    - name: Prerequisites
         run: |
           sudo apt update
           sudo apt install -y curl
