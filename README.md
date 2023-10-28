@@ -6,5 +6,7 @@ But the dolphin-emu-nogui binary is working well... all you need to do is to run
 Or if you fell insecure about unpack this app and seach for an easy solution you may find slippi ishiruka project more reliable.
 https://github.com/project-slippi/Ishiiruka/releases
 slippi ishiruka is a dolphin emulator moded.
+or
+https://github.com/qurious-pixel/dolphin
 sorry for my bad, unfortunately I did my best til now, this app is very dificult to pack I've made so many builds.
 if you know some trick that could help me to nail that feel free to bug report it to me in here, I'll be very happy to fix this issue.
