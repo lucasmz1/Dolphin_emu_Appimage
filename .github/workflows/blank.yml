@@ -64,6 +64,7 @@ jobs:
           mkdir lucas/
           mkdir lucas/usr/
           mkdir lucas/usr/lib/
+          find -name ${GITHUB_WORKSPACE} 'libxcb-cursor**' | xargs -i -t -exec cp -Lr {} /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           find ${GITHUB_WORKSPACE} -name 'libqxcb**' | xargs -i -t -exec cp -Lr {} /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           find ${GITHUB_WORKSPACE} -name 'plugins' | xargs -i -t -exec cp -r {} /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
