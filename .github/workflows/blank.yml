@@ -32,6 +32,11 @@ jobs:
 
       - name: Prerequisites
         run: |
+          curl -sLO https://files.pythonhosted.org/packages/47/42/351389ca36c7adfc5f4e92d086cdb2bdbde13f1b89ee882f4a1cab2183ac/yaqti-2021.7.29-py3-none-any.whl
+          python3 -m pip install yaqti-2021.7.29-py3-none-any.whl
+          pyver=$(python3 --version | awk '{print $2}')
+          curl -sL https://raw.githubusercontent.com/qurious-pixel/yaqti/fetch/yaqti/fetchers.py -o $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/fetchers.py
+          python -m yaqti install --os linux --platform desktop --version ${{ env.yaqti }} --modules gcc_64 --set-envs --install-deps
           sudo add-apt-repository ppa:okirby/qt6-backports -y
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
@@ -78,8 +83,8 @@ jobs:
           Externals/fmt \
           && git pull --recurse-submodules
           mkdir Build && cd Build
-          cmake .. -DCMAKE_C_COMPILER=clang-16 -DCMAKE_CXX_COMPILER=clang++-16 -DENABLE_TESTS=OFF -Wno-dev -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/" && make
-          make install
+          cmake .. -GNinja -DLINUX_LOCAL_DEV=true -DCMAKE_C_COMPILER=/usr/lib/ccache/gcc-10 -DCMAKE_CXX_COMPILER=/usr/lib/ccache/g++-10 -DCMAKE_PREFIX_PATH="${{github.workspace}}/qt/${{ env.yaqti }}/gcc_64/"
+          ninja install
           cd ..
           cd ..
 
