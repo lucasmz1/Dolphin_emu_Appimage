@@ -94,7 +94,10 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build appimage
         run: |
-
+          
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${GITHUB_WORKSPACE}/qt/6.6.0/gcc_64/lib/
+          export PATH=${GITHUB_WORKSPACE}/qt/6.6.0/gcc_64/bin:$PATH
+          echo "PATH $PATH"
           ./linuxdeploy --appdir lucas/
           ARCH=x86_64 ./appimagetool -n lucas/
 
