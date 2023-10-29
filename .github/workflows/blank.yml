@@ -64,9 +64,9 @@ jobs:
           mkdir lucas/
           mkdir lucas/usr/
           mkdir lucas/usr/lib/
-          find /usr -name 'libqxcb**' | xargs -i -t -exec cp -Lr {} /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
+          find ${GITHUB_WORKSPACE} -name 'libqxcb**' | xargs -i -t -exec cp -Lr {} /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
-          cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/ /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
+          find ${GITHUB_WORKSPACE} -name 'plugins' | xargs -i -t -exec cp -r {} /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           cp dolphin-emu.desktop dolphin-emu.png AppRun libunionpreload.so lucas/
           cd ./dolphin-emu
           git checkout master
@@ -82,8 +82,10 @@ jobs:
           Externals/rcheevos \
           Externals/fmt \
           && git pull --recurse-submodules
+          export Qt_DIR="${{github.workspace}}/qt/6.6.0/gcc_64/lib/cmake/Qt6"
+          mkdir -p "$HOME/.ccache"
           mkdir Build && cd Build
-          cmake .. -GNinja -DLINUX_LOCAL_DEV=true -DCMAKE_C_COMPILER=/usr/lib/ccache/gcc-10 -DCMAKE_CXX_COMPILER=/usr/lib/ccache/g++-10 -DCMAKE_PREFIX_PATH="${{github.workspace}}/qt/${{ env.yaqti }}/gcc_64/"
+          cmake .. -GNinja -DLINUX_LOCAL_DEV=true -DCMAKE_C_COMPILER=/usr/lib/ccache/gcc-10 -DCMAKE_CXX_COMPILER=/usr/lib/ccache/g++-10 -DCMAKE_PREFIX_PATH="${{github.workspace}}/qt/6.6.0/gcc_64/"
           ninja install
           cd ..
           cd ..
