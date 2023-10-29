@@ -60,6 +60,7 @@ jobs:
           sudo apt-get install gcc-$version g++-$version
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$version 60 \
           --slave   /usr/bin/g++ g++ /usr/bin/g++-$version
+          wget -q "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage" -O qtplugin ; chmod a+x qtplugin
           wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O linuxdeploy ; chmod a+x linuxdeploy
           wget -q "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
           wget https://apt.llvm.org/llvm.sh
@@ -102,8 +103,8 @@ jobs:
           export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${GITHUB_WORKSPACE}/qt/6.6.0/gcc_64/lib/
           export PATH=${GITHUB_WORKSPACE}/qt/6.6.0/gcc_64/bin:$PATH
           echo "PATH $PATH"
+          ./qtplugin --appdir lucas/
           ./linuxdeploy --appdir lucas/
-          find ${GITHUB_WORKSPACE} -name 'plugins' | xargs -i -t -exec cp -r {} /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           ARCH=x86_64 ./appimagetool -n lucas/
 
       - name: release
