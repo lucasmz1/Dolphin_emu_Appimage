@@ -37,6 +37,8 @@ jobs:
           pyver=$(python3 --version | awk '{print $2}')
           curl -sL https://raw.githubusercontent.com/qurious-pixel/yaqti/fetch/yaqti/fetchers.py -o $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/fetchers.py
           python -m yaqti install --os linux --platform desktop --version 6.6.0 --modules gcc_64 --set-envs --install-deps
+          sudo add-apt-repository ppa:okirby/qt6-backports -y
+          sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
@@ -61,10 +63,7 @@ jobs:
           wget -q "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage" -O qtplugin ; chmod a+x qtplugin
           wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O linuxdeploy ; chmod a+x linuxdeploy
           wget -q "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
-          wget https://apt.llvm.org/llvm.sh
-          chmod +x llvm.sh
-          sudo ./llvm.sh 16
-          git clone https://github.com/dolphin-emu/dolphin.git dolphin-emu
+          git clone --depth=1 -b master https://github.com/dolphin-emu/dolphin.git dolphin-emu
           mkdir lucas/
           mkdir lucas/usr/
           mkdir lucas/usr/lib/
@@ -73,23 +72,14 @@ jobs:
           cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           cp dolphin-emu.desktop dolphin-emu.png AppRun libunionpreload.so lucas/
           cd ./dolphin-emu
-          git checkout master
-          git submodule update --init --recursive \
-          Externals/mGBA \
-          Externals/spirv_cross \
-          Externals/zlib-ng \
-          Externals/libspng \
-          Externals/VulkanMemoryAllocator \
-          Externals/cubeb \
-          Externals/implot \
-          Externals/gtest \
-          Externals/rcheevos \
-          Externals/fmt \
-          && git pull --recurse-submodules
+          [ "${COMMIT:=}" ] && git fetch --unshallow --tags && git checkout "$COMMIT"
+          HEAD="$(git rev-parse --short HEAD)"
+          DATE="$(git show -s --format=%cd --date=format:%Y.%m.%d)"
+          VERSION="${DATE}_$HEAD"
           export Qt_DIR="${{github.workspace}}/qt/6.6.0/gcc_64/lib/cmake/Qt6"
           mkdir -p "$HOME/.ccache"
           mkdir Build && cd Build
-          cmake .. -DCMAKE_PREFIX_PATH="${GITHUB_WORKSPACE}/qt/6.6.0/gcc_64/" -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
+          cmake .. -DCMAKE_PREFIX_PATH="${GITHUB_WORKSPACE}/qt/6.6.0/gcc_64/" -DCMAKE_BUILD_TYPE=$RELEASE .. -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
           make install
           cd ..
           cd ..
