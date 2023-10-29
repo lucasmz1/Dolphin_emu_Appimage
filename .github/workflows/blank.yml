@@ -36,7 +36,7 @@ jobs:
           python3 -m pip install yaqti-2021.7.29-py3-none-any.whl
           pyver=$(python3 --version | awk '{print $2}')
           curl -sL https://raw.githubusercontent.com/qurious-pixel/yaqti/fetch/yaqti/fetchers.py -o $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/fetchers.py
-          python -m yaqti install --os linux --platform desktop --version ${{ env.yaqti }} --set-envs --install-deps
+          python -m yaqti install --os linux --platform desktop --version 6.6.0 --modules gcc_64 --set-envs --install-deps
           sudo add-apt-repository ppa:okirby/qt6-backports -y
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
