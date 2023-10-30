@@ -83,8 +83,8 @@ jobs:
           export Qt_DIR="${{github.workspace}}/qt/6.6.0/gcc_64/lib/cmake/Qt6"
           mkdir -p "$HOME/.ccache"
           mkdir Build && cd Build
-          cmake .. -DLINUX_LOCAL_DEV=true -DCMAKE_C_COMPILER=clang-16 -DCMAKE_CXX_COMPILER=clang++-16 -DCMAKE_PREFIX_PATH="${GITHUB_WORKSPACE}/qt/6.6.0/gcc_64/" -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
-          make install
+          cmake .. -GNinja -DLINUX_LOCAL_DEV=true -DCMAKE_C_COMPILER=clang-16 -DCMAKE_CXX_COMPILER=clang++-16 -DCMAKE_PREFIX_PATH="${GITHUB_WORKSPACE}/qt/6.6.0/gcc_64/" -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
+          ninja install
           cd ..
           cd ..
 
@@ -97,7 +97,6 @@ jobs:
           echo "PATH $PATH"
           ./qtplugin --appdir lucas/
           ./linuxdeploy --appdir lucas/
-          mkdir lucas/usr/bin/Sys/
           find . -iname 'Sys' | xargs -i -t -exec cp -r {} ${GITHUB_WORKSPACE}/lucas/usr/bin/
           ARCH=x86_64 ./appimagetool -n lucas/
 
