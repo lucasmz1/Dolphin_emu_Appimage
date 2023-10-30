@@ -70,6 +70,8 @@ jobs:
           mkdir lucas/
           mkdir lucas/usr/
           mkdir lucas/usr/lib/
+          mkdir lucas/usr/bin/
+          mkdir lucas/usr/bin/Sys/
           find -name ${GITHUB_WORKSPACE} 'libxcb-cursor**' | xargs -i -t -exec cp -Lr {} /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           find ${GITHUB_WORKSPACE} -name 'libqxcb**' | xargs -i -t -exec cp -Lr {} /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
           cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/lib/
@@ -97,6 +99,7 @@ jobs:
           echo "PATH $PATH"
           ./qtplugin --appdir lucas/
           ./linuxdeploy --appdir lucas/
+          cp -r /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/usr/share/dolphin-emu/sys/* /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/usr/bin/Sys/ 
           ARCH=x86_64 ./appimagetool -n lucas/
 
       - name: release
