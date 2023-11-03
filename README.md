@@ -5,9 +5,7 @@ then
 ./Dolphin_Emulator-x86_64.AppImage or just double click upon it.
 
 this down bellow are other projects that develope dolphin and pack it as appimage.
+
 https://github.com/project-slippi/Ishiiruka/releases
+
 https://github.com/qurious-pixel/dolphin
-
-this web site down bellow you may find roms to run on it.
-
-https://r-roms.github.io/megathread/nintendo/
