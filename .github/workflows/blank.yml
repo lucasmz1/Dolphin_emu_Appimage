@@ -36,7 +36,7 @@ jobs:
           python3 -m pip install yaqti-2021.7.29-py3-none-any.whl
           pyver=$(python3 --version | awk '{print $2}')
           cp fetchers.py $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/
-          python -m yaqti install --os linux --platform desktop --version 6.6.1 --modules gcc_64 --set-envs --install-deps
+          python -m yaqti install --os linux --platform desktop --version 6.6.1 --modules qt3d qtcharts qtconnectivity qtdatavis3d qtgraphs qtgrpc qthttpserver qtimageformats qtlanguageserver qtlocation qtlottie qtmultimedia qtnetworkauth qtpdf qtpositioning qtquick3dphysics qtquickeffectmaker qtremoteobjects qtscxml qtsensors qtserialbus qtserialport qtspeech qtvirtualkeyboard qtwebchannel qtwebengine qtwebsockets qtwebview debug_info gcc_64 qt5compat qtquick3d qtquicktimeline qtshadertools qtwaylandcompositor --set-envs --install-deps
           find . -iname '6.6.1' | xargs -i -t sudo ln -frs -T {} /usr/lib/qt6
           sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
           sudo apt update
