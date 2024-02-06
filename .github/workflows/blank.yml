@@ -35,10 +35,8 @@ jobs:
           curl -sLO https://files.pythonhosted.org/packages/47/42/351389ca36c7adfc5f4e92d086cdb2bdbde13f1b89ee882f4a1cab2183ac/yaqti-2021.7.29-py3-none-any.whl
           python3 -m pip install yaqti-2021.7.29-py3-none-any.whl
           pyver=$(python3 --version | awk '{print $2}')
-          curl -sL https://raw.githubusercontent.com/qurious-pixel/yaqti/fetch/yaqti/fetchers.py -o $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/fetchers.py
-          python -m yaqti install --os linux --platform desktop --version 6.6.0 --modules gcc_64 --set-envs --install-deps
-          sudo add-apt-repository ppa:okirby/qt6-backports -y
-          sudo apt update
+          cp fetchers.py $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/
+          python -m yaqti install --os linux --platform desktop --version 6.6.1 --modules gcc_64 --set-envs --install-deps
           sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
