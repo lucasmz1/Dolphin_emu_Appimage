@@ -37,7 +37,7 @@ jobs:
           pyver=$(python3 --version | awk '{print $2}')
           cp fetchers.py $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/
           python -m yaqti install --os linux --platform desktop --version 6.6.1 --modules gcc_64 --set-envs --install-deps
-          find . -iname '6.6.1' | sudo ln -rs -T {} /usr/lib/qt6
+          find . -iname '6.6.1' | xargs -i -t sudo ln -rs -T {} /usr/lib/qt6
           sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
