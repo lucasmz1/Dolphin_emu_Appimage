@@ -37,7 +37,6 @@ jobs:
           pyver=$(python3 --version | awk '{print $2}')
           cp fetchers.py $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/
           python -m yaqti install --os linux --platform desktop --version 6.6.1 --modules gcc_64 --set-envs --install-deps
-          find . -iname '6.6.1' | xargs -i -t sudo ln -frs -T {} /usr/lib/qt6
           sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
@@ -79,13 +78,13 @@ jobs:
           HEAD="$(git rev-parse --short HEAD)"
           DATE="$(git show -s --format=%cd --date=format:%Y.%m.%d)"
           VERSION="${DATE}_$HEAD"
-          export PATH="${{github.workspace}}/qt/6.6.1/gcc_64/bin/:$PATH"
+          export PATH=$PATH:$( find $github.workspace/qt/6.6.1/ -type d -printf ":%p" )
           export QMAKE="${{github.workspace}}/qt/6.6.1/gcc_64/bin/"
           export CMAKE_PREFIX_PATH="${{github.workspace}}/qt/6.6.1/gcc_64/"
-          export Qt_DIR="${{github.workspace}}/qt/6.6.1/gcc_64/lib/cmake/Qt6"
+          export QT_DIR="$QT_DIR:${{github.workspace}}/qt/6.6.1/gcc_64/lib/cmake/Qt6/"
           mkdir -p "$HOME/.ccache"
           mkdir Build && cd Build
-          cmake .. -GNinja -DLINUX_LOCAL_DEV=true -DCMAKE_C_COMPILER=clang-16 -DCMAKE_CXX_COMPILER=clang++-16 -DCMAKE_PREFIX_PATH="${GITHUB_WORKSPACE}/qt/6.6.0/gcc_64/" -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
+          cmake .. -GNinja -DLINUX_LOCAL_DEV=true -DCMAKE_C_COMPILER=clang-16 -DCMAKE_CXX_COMPILER=clang++-16 -DCMAKE_PREFIX_PATH="${GITHUB_WORKSPACE}/qt/6.6.1/gcc_64/" -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
           ninja install
           cd ..
           cd ..
@@ -94,8 +93,8 @@ jobs:
       - name: Build appimage
         run: |
           
-          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${GITHUB_WORKSPACE}/qt/6.6.1/gcc_64/lib/
-          export PATH=${GITHUB_WORKSPACE}/qt/6.6.1/gcc_64/bin:$PATH
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$( find $github.workspace/qt/6.6.1/ -type d -printf ":%p" )
+          export PATH=$PATH:$( find $github.workspace/qt/6.6.1/ -type d -printf ":%p" )
           echo "PATH $PATH"
           ./qtplugin --appdir lucas/
           ./linuxdeploy --appdir lucas/
