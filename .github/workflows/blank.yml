@@ -6,7 +6,7 @@ name: CI
 on:
   # Build at 00:00 on every 12th day-of-month.
   schedule:
-    - cron: "0 0 */12 * *"
+    - cron: "0 0 */6 * *"
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ main ]
@@ -94,7 +94,9 @@ jobs:
         run: |
           
           export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$( find ${{github.workspace}}/qt/6.6.1/ -type d -printf ":%p" )
+          echo $LD_LIBRARY_PATH
           export PATH=$PATH:$( find ${{github.workspace}}/qt/6.6.1/ -type d -printf ":%p" )
+          echo $PATH
           echo "PATH $PATH"
           ./qtplugin --appdir lucas/
           ./linuxdeploy --appdir lucas/
