@@ -97,7 +97,6 @@ jobs:
           echo $LD_LIBRARY_PATH
           export PATH=$PATH:$( find ${{github.workspace}}/qt/6.7.1/ -type d -printf ":%p" )
           echo $PATH
-          echo "PATH $PATH"
           ./qtplugin --appdir lucas/
           ./linuxdeploy --appdir lucas/
           find . -iname 'Sys' | xargs -i -t -exec cp -r {} ${GITHUB_WORKSPACE}/lucas/usr/bin/
