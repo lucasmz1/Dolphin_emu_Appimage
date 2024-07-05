@@ -84,7 +84,7 @@ jobs:
           export QT_DIR="$QT_DIR:${{github.workspace}}/qt/6.7.0/gcc_64/lib/cmake/Qt6/"
           mkdir -p "$HOME/.ccache"
           mkdir Build && cd Build
-          cmake .. -GNinja -DLINUX_LOCAL_DEV=true -DCMAKE_C_COMPILER=clang-16 -DCMAKE_CXX_COMPILER=clang++-16 -DCMAKE_PREFIX_PATH="${GITHUB_WORKSPACE}/qt/6.7.0/gcc_64/" -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
+          cmake .. -GNinja -DENABLE_LLVM_SHARED=1 -DLINUX_LOCAL_DEV=true -DCMAKE_C_COMPILER=clang-16 -DCMAKE_CXX_COMPILER=clang++-16 -DCMAKE_PREFIX_PATH="${GITHUB_WORKSPACE}/qt/6.7.0/gcc_64/" -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
           ninja install
           cd ..
           cd ..
