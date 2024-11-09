@@ -15,3 +15,6 @@ this down bellow are other projects that develope dolphin and pack it as appimag
 https://github.com/project-slippi/Ishiiruka/releases
 
 https://github.com/qurious-pixel/dolphin
+
+<h1>Telegram Group<h1/>
+<h1>https://t.me/appimagelucasmz1<h1/>
