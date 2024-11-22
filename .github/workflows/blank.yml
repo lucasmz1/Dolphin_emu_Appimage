@@ -65,7 +65,7 @@ jobs:
           wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O linuxdeploy ; chmod a+x linuxdeploy
           wget -q "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
           git clone --filter="blob:none" --depth=1 -b master https://github.com/dolphin-emu/dolphin.git dolphin-emu
-          VERSION2="$(git -C dolphin-emu rev-parse --short HEAD)"; export VERSION2
+          export VERSION2=$(git tag | tail -n 1)
           mkdir lucas/
           mkdir lucas/usr/
           mkdir lucas/usr/lib/
@@ -101,7 +101,7 @@ jobs:
           ./qtplugin --appdir lucas/
           ./linuxdeploy --appdir lucas/
           find . -iname 'Sys' | xargs -i -t -exec cp -r {} ${GITHUB_WORKSPACE}/lucas/usr/bin/
-          ARCH=x86_64 VERSION=git ./appimagetool -n lucas/
+          ARCH=x86_64 VERSION=$VERSION2 ./appimagetool -n lucas/
 
       - name: release
         uses: "marvinpinto/action-automatic-releases@6273874b61ebc8c71f1a61b2d98e234cf389b303"
