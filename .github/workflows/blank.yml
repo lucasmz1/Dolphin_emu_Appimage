@@ -52,7 +52,7 @@ jobs:
           libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-icccm4 libxcb-image0-dev libxcb-cursor-dev
           sudo apt install git cmake pkg-config gcc libwxbase3.0-dev mesa-common-dev libgtk2.0-dev libxext-dev libreadline-dev libglu1-mesa-dev libgl1-mesa-dev libevdev-dev libudev-dev -y
           sudo apt-get install make cmake git g++ libgtk2.0-dev libsdl1.2-dev libxrandr-dev libxext-dev libao-dev libasound2-dev libpulse-dev libbluetooth-dev libreadline-gplv2-dev libavcodec-dev libavformat-dev libswscale-dev -y
-          sudo apt install --no-install-recommends ca-certificates ninja-build git cmake make g++-13 gcc-13 pkg-config libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libxi-dev libxrandr-dev libudev-dev libevdev-dev libsfml-dev libminiupnpc-dev libmbedtls-dev libcurl4-openssl-dev libhidapi-dev libsystemd-dev libbluetooth-dev libasound2-dev libpulse-dev libpugixml-dev libbz2-dev libzstd-dev liblzo2-dev libpng-dev libusb-1.0-0-dev gettext -y
+          sudo apt install --no-install-recommends ca-certificates ninja-build git cmake make g++-11 gcc-11 pkg-config libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libxi-dev libxrandr-dev libudev-dev libevdev-dev libsfml-dev libminiupnpc-dev libmbedtls-dev libcurl4-openssl-dev libhidapi-dev libsystemd-dev libbluetooth-dev libasound2-dev libpulse-dev libpugixml-dev libbz2-dev libzstd-dev liblzo2-dev libpng-dev libusb-1.0-0-dev gettext -y
           sudo apt install git -y
           sudo apt install libstdc++6 libc++-dev libc++abi-dev -y
                     version=$(apt-cache pkgnames | sed -nr 's/^gcc-(([0-9]+\.?)+)$/\1/p' \
@@ -85,7 +85,7 @@ jobs:
           export QT_DIR="$QT_DIR:${{github.workspace}}/qt/6.7.3/gcc_64/lib/cmake/Qt6/"
           mkdir -p "$HOME/.ccache"
           mkdir Build && cd Build
-          cmake .. -GNinja -DCMAKE_C_COMPILER=gcc-13 -DCMAKE_CXX_COMPILER=g++-13 -DLINUX_LOCAL_DEV=true -DCMAKE_PREFIX_PATH="${GITHUB_WORKSPACE}/qt/6.7.3/gcc_64/" -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
+          cmake .. -GNinja -DCMAKE_C_COMPILER=gcc-11 -DCMAKE_CXX_COMPILER=g++-11 -DLINUX_LOCAL_DEV=true -DCMAKE_PREFIX_PATH="${GITHUB_WORKSPACE}/qt/6.7.3/gcc_64/" -DCMAKE_INSTALL_PREFIX="/home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/lucas/usr/"
           ninja install
           cd ..
           cd ..
