@@ -61,6 +61,7 @@ jobs:
           sudo apt-get install gcc-$version g++-$version
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$version 60 \
           --slave   /usr/bin/g++ g++ /usr/bin/g++-$version
+          sudo apt remove --purge llvm-* clang-* -y
           wget -q "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage" -O qtplugin ; chmod a+x qtplugin
           wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O linuxdeploy ; chmod a+x linuxdeploy
           wget -q "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
