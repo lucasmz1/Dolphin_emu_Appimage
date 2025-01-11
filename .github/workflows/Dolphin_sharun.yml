@@ -67,8 +67,6 @@ jobs:
           --slave   /usr/bin/g++ g++ /usr/bin/g++-$version
           sudo apt remove --purge llvm-* clang-* -y
           sudo apt autoremove -y
-          LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
-          wget -q -c "$LIB4BN" ; chmod a+x lib4bin
           wget -q "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage" -O qtplugin ; chmod a+x qtplugin
           wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O linuxdeploy ; chmod a+x linuxdeploy
           wget -q "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
@@ -93,7 +91,7 @@ jobs:
           #export QT_DIR="$QT_DIR:${{github.workspace}}/qt/6.7.3/gcc_64/lib/cmake/Qt6/"
           mkdir -p "$HOME/.ccache"
           mkdir Build && cd Build
-          cmake .. -GNinja -DCMAKE_C_COMPILER=gcc-11 -DCMAKE_CXX_COMPILER=g++-11 -DLINUX_LOCAL_DEV=true -DCMAKE_INSTALL_PREFIX="${{github.workspace}}/lucas/usr/"
+          cmake .. -GNinja -DCMAKE_C_COMPILER=gcc-11 -DCMAKE_CXX_COMPILER=g++-11 -DLINUX_LOCAL_DEV=true
           ninja install
           cd ..
           cd ..
@@ -101,20 +99,12 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build appimage
         run: |
-          
-          #export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$( find ${{github.workspace}}/qt/6.7.3/ -type d -printf ":%p" )
-          #echo $LD_LIBRARY_PATH
+          LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
           export PATH="$PATH:${{github.workspace}}"
           cd lucas2/
-          chmod a+x ./AppRun
-          xvfb-run -- lib4bin -p -v -r -e -s -k "${{github.workspace}}/lucas/usr/bin/dolphin-emu-nogui" "${{github.workspace}}/lucas/usr/bin/dolphin-tool" "${{github.workspace}}/lucas/usr/bin/dolphin-emu"
-          ./sharun -g
-          find "${{github.workspace}}/lucas2/shared/lib/home/" -type f | xargs -i -t -exec cp -Lr "${{github.workspace}}/lucas2/shared/lib" 
+          wget -q "$LIB4BN" -O ./lib4bin && chmod +x ./lib4bin
+          xvfb-run -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
           cd ..
-          find . -iname 'Sys' | xargs -i -t -exec cp -r {} ${GITHUB_WORKSPACE}/lucas2/bin/
-          find -iname ${GITHUB_WORKSPACE} 'libxcb-cursor**' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
-          find ${GITHUB_WORKSPACE} -iname 'libqxcb**' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
-          find ${GITHUB_WORKSPACE} -iname 'libQt6XcbQpa.so.6' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
           ARCH=x86_64 VERSION=git ./appimagetool -n lucas2/
 
       - name: release
