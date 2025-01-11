@@ -98,15 +98,15 @@ jobs:
       - name: Build appimage
         run: |
           
-          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$( find ${{github.workspace}}/qt/6.7.3/ -type d -printf ":%p" )
-          echo $LD_LIBRARY_PATH
+          #export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$( find ${{github.workspace}}/qt/6.7.3/ -type d -printf ":%p" )
+          #echo $LD_LIBRARY_PATH
           export PATH="$PATH:${{github.workspace}}"
           echo $PATH
           cd lucas2/
           chmod a+x ./AppRun
           xvfb-run -- lib4bin -p -v -r -e -s -k "${{github.workspace}}/lucas/usr/bin/dolphin-emu-nogui" "${{github.workspace}}/lucas/usr/bin/dolphin-tool" "${{github.workspace}}/lucas/usr/bin/dolphin-emu"
           ./sharun -g
-          find "${{github.workspace}}/lucas2/shared/lib/home/" -type f | xargs -i -t -exec mv {} "${{github.workspace}}/lucas2/shared/lib" 
+          find "${{github.workspace}}/lucas2/shared/lib/home/" -type f | xargs -i -t -exec cp -Lr "${{github.workspace}}/lucas2/shared/lib" 
           cd ..
           find . -iname 'Sys' | xargs -i -t -exec cp -r {} ${GITHUB_WORKSPACE}/lucas2/bin/
           find -iname ${GITHUB_WORKSPACE} 'libxcb-cursor**' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
