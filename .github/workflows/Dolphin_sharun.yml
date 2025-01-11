@@ -103,7 +103,7 @@ jobs:
           export PATH="$PATH:${{github.workspace}}"
           echo $PATH
           cd lucas2/
-          xvfb-run -d -- sharun lib4bin -p -v -r -e -s "${{github.workspace}}/lucas/usr/bin/dolphin-emu" "${{github.workspace}}/lucas/usr/bin/dolphin-emu-nogui" "${{github.workspace}}/lucas/usr/bin/dolphin-tool"
+          xvfb-run -a -- sharun lib4bin -p -v -r -e -s "${{github.workspace}}/lucas/usr/bin/dolphin-emu" "${{github.workspace}}/lucas/usr/bin/dolphin-emu-nogui" "${{github.workspace}}/lucas/usr/bin/dolphin-tool"
           ln -s ./bin/dolphin-emu ./AppRun
           sharun -g
           cd ..
