@@ -103,13 +103,13 @@ jobs:
           xvfb-run -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
           cp -r /usr/local/share/dolphin-emu/sys ./bin
           mkdir -p ./shared/lib/qt6/plugins
-          cp -r /usr/lib/qt6/plugins/iconengines       ./shared/lib/qt6/plugins || true
-          cp -r /usr/lib/qt6/plugins/imageformats      ./shared/lib/qt6/plugins || true
-          cp -r /usr/lib/qt6/plugins/platforms         ./shared/lib/qt6/plugins || true
-          cp -r /usr/lib/qt6/plugins/platformthemes    ./shared/lib/qt6/plugins || true
-          cp -r /usr/lib/qt6/plugins/styles            ./shared/lib/qt6/plugins || true
-          cp -r /usr/lib/qt6/plugins/xcbglintegrations ./shared/lib/qt6/plugins || true
-          cp -r /usr/lib/qt6/plugins/wayland-*         ./shared/lib/qt6/plugins || true
+          cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/iconengines       ./shared/lib/qt6/plugins || true
+          cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/imageformats      ./shared/lib/qt6/plugins || true
+          cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms         ./shared/lib/qt6/plugins || true
+          cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes    ./shared/lib/qt6/plugins || true
+          cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/styles            ./shared/lib/qt6/plugins || true
+          cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/xcbglintegrations ./shared/lib/qt6/plugins || true
+          cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/wayland-*         ./shared/lib/qt6/plugins || true
           cd ..
           ARCH="$(uname -m)" VERSION=git ./appimagetool -n lucas2/
 
