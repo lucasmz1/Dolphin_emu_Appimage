@@ -44,7 +44,7 @@ jobs:
           #wget https://apt.llvm.org/llvm.sh
           #chmod +x llvm.sh
           #sudo ./llvm.sh 16
-          sudo apt update && sudo apt install libfuse2 xvfb -y
+          sudo apt update && sudo apt install libfuse2 xvfb libxcb-cursor0 -y
           sudo apt-get install -y build-essential desktop-file-utils dialog dpkg libbluetooth-dev liblz4-dev liblzma-dev libssl-dev libopus-dev libpng-dev libsystemd-dev \
           libzip-dev libzstd-dev zlib1g-dev libasound2-dev libpulse-dev pulseaudio p7zip p7zip-full libsfml-dev libminiupnpc-dev libmbedtls-dev libpugixml-dev \
           libbz2-dev liblzo2-dev libxi-dev libavcodec-dev libudev-dev libusb-1.0-0-dev libevdev-dev libc6-dev libhidapi-dev libavformat-dev libavdevice-dev \
@@ -63,10 +63,11 @@ jobs:
           --slave   /usr/bin/g++ g++ /usr/bin/g++-$version
           sudo apt remove --purge llvm-* clang-* -y
           sudo apt autoremove -y
+          LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
+          wget -q -c "$LIB4BN" ; chmod a+x lib4bin
           wget -q "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage" -O qtplugin ; chmod a+x qtplugin
           wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O linuxdeploy ; chmod a+x linuxdeploy
           wget -q "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
-          wget -q -c "https://github.com/VHSgunzo/sharun/releases/download/v0.2.3/sharun-x86_64" -O sharun ; chmod a+x sharun
           git clone --filter="blob:none" --depth=1 -b master https://github.com/dolphin-emu/dolphin.git dolphin-emu
           export VERSION2=$(git tag | tail -n 1)
           mkdir lucas/
@@ -103,7 +104,7 @@ jobs:
           echo $PATH
           cd lucas2/
           chmod a+x ./AppRun
-          xvfb-run -a -- sharun lib4bin -p -v -r -e -s "${{github.workspace}}/lucas/usr/bin/dolphin-emu-nogui" "${{github.workspace}}/lucas/usr/bin/dolphin-tool" "${{github.workspace}}/lucas/usr/bin/dolphin-emu"
+          xvfb-run -- lib4bin -p -v -r -e -s -k "${{github.workspace}}/lucas/usr/bin/dolphin-emu-nogui" "${{github.workspace}}/lucas/usr/bin/dolphin-tool" "${{github.workspace}}/lucas/usr/bin/dolphin-emu"
           ./sharun -g
           find "${{github.workspace}}/lucas2/shared/lib/home/" -type f | xargs -i -t -exec mv {} "${{github.workspace}}/lucas2/shared/lib" 
           cd ..
