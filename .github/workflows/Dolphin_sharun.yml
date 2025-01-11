@@ -100,7 +100,7 @@ jobs:
           
           export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$( find ${{github.workspace}}/qt/6.7.3/ -type d -printf ":%p" )
           echo $LD_LIBRARY_PATH
-          export PATH=$PATH:$( find ${{github.workspace}} -type d -printf ":%p" )
+          export PATH="$PATH:${{github.workspace}}"
           echo $PATH
           cd lucas2/
           xvfb-run -d -- sharun lib4bin -p -v -r -e -s "${{github.workspace}}/lucas/usr/bin/dolphin-emu" "${{github.workspace}}/lucas/usr/bin/dolphin-emu-nogui" "${{github.workspace}}/lucas/usr/bin/dolphin-tool"
