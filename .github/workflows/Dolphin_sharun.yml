@@ -72,9 +72,7 @@ jobs:
           wget -q "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
           git clone --filter="blob:none" --depth=1 -b master https://github.com/dolphin-emu/dolphin.git dolphin-emu
           #export VERSION2=$(git tag | tail -n 1)
-          mkdir lucas/
-          mkdir lucas/usr/
-          mkdir lucas/usr/lib/
+          mkdir -p lucas/usr/lib/
           mkdir -p lucas2/shared/lib/
           cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 ${{github.workspace}}/lucas2/shared/lib/
           cp dolphin-emu.desktop dolphin-emu.png lucas2/
@@ -104,8 +102,16 @@ jobs:
           wget -q "$LIB4BN" -O ./lib4bin && chmod +x ./lib4bin
           xvfb-run -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
           cp -r /usr/local/share/dolphin-emu/sys ./bin
+          mkdir -p ./shared/lib/qt6/plugins
+          cp -r /usr/lib/qt6/plugins/iconengines       ./shared/lib/qt6/plugins || true
+          cp -r /usr/lib/qt6/plugins/imageformats      ./shared/lib/qt6/plugins || true
+          cp -r /usr/lib/qt6/plugins/platforms         ./shared/lib/qt6/plugins || true
+          cp -r /usr/lib/qt6/plugins/platformthemes    ./shared/lib/qt6/plugins || true
+          cp -r /usr/lib/qt6/plugins/styles            ./shared/lib/qt6/plugins || true
+          cp -r /usr/lib/qt6/plugins/xcbglintegrations ./shared/lib/qt6/plugins || true
+          cp -r /usr/lib/qt6/plugins/wayland-*         ./shared/lib/qt6/plugins || true
           cd ..
-          ARCH=x86_64 VERSION=git ./appimagetool -n lucas2/
+          ARCH="$(uname -m)" VERSION=git ./appimagetool -n lucas2/
 
       - name: release
         uses: "marvinpinto/action-automatic-releases@6273874b61ebc8c71f1a61b2d98e234cf389b303"
