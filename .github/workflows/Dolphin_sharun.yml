@@ -32,11 +32,11 @@ jobs:
 
       - name: Prerequisites
         run: |
-          curl -sLO https://files.pythonhosted.org/packages/47/42/351389ca36c7adfc5f4e92d086cdb2bdbde13f1b89ee882f4a1cab2183ac/yaqti-2021.7.29-py3-none-any.whl
-          python3 -m pip install yaqti-2021.7.29-py3-none-any.whl
-          pyver=$(python3 --version | awk '{print $2}')
-          cp fetchers.py $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/
-          python -m yaqti install --os linux --platform desktop --version 6.7.3 --modules linux_gcc_64 --set-envs --install-deps
+          #curl -sLO https://files.pythonhosted.org/packages/47/42/351389ca36c7adfc5f4e92d086cdb2bdbde13f1b89ee882f4a1cab2183ac/yaqti-2021.7.29-py3-none-any.whl
+          #python3 -m pip install yaqti-2021.7.29-py3-none-any.whl
+          #pyver=$(python3 --version | awk '{print $2}')
+          #cp fetchers.py $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/
+          #python -m yaqti install --os linux --platform desktop --version 6.7.3 --modules linux_gcc_64 --set-envs --install-deps
           sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
@@ -44,7 +44,11 @@ jobs:
           #wget https://apt.llvm.org/llvm.sh
           #chmod +x llvm.sh
           #sudo ./llvm.sh 16
-          sudo apt update && sudo apt install libfuse2 xvfb libxcb-cursor0 -y
+          sudo apt update && sudo apt install libfuse2 -y
+          ####################################################################
+          ##build without yaqti
+          sudo apt install xvfb libxcb-cursor0 build-essential git cmake ffmpeg libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libevdev-dev libusb-1.0-0-dev libxrandr-dev libxi-dev libpangocairo-1.0-0 qt6-base-private-dev libqt6svg6-dev libbluetooth-dev libasound2-dev libpulse-dev libgl1-mesa-dev libcurl4-openssl-dev sudo apt install libudev-dev libsystemd-dev || sudo apt install libeudev-dev
+          ####################################################################
           sudo apt-get install -y build-essential desktop-file-utils dialog dpkg libbluetooth-dev liblz4-dev liblzma-dev libssl-dev libopus-dev libpng-dev libsystemd-dev \
           libzip-dev libzstd-dev zlib1g-dev libasound2-dev libpulse-dev pulseaudio p7zip p7zip-full libsfml-dev libminiupnpc-dev libmbedtls-dev libpugixml-dev \
           libbz2-dev liblzo2-dev libxi-dev libavcodec-dev libudev-dev libusb-1.0-0-dev libevdev-dev libc6-dev libhidapi-dev libavformat-dev libavdevice-dev \
@@ -69,7 +73,7 @@ jobs:
           wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O linuxdeploy ; chmod a+x linuxdeploy
           wget -q "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
           git clone --filter="blob:none" --depth=1 -b master https://github.com/dolphin-emu/dolphin.git dolphin-emu
-          export VERSION2=$(git tag | tail -n 1)
+          #export VERSION2=$(git tag | tail -n 1)
           mkdir lucas/
           mkdir lucas/usr/
           mkdir lucas/usr/lib/
@@ -83,10 +87,10 @@ jobs:
           HEAD="$(git rev-parse --short HEAD)"
           DATE="$(git show -s --format=%cd --date=format:%Y.%m.%d)"
           VERSION="${DATE}_$HEAD"
-          export PATH=$PATH:$( find ${{github.workspace}}/qt/6.7.3/ -type d -printf ":%p" )
-          export QMAKE="${{github.workspace}}/qt/6.7.3/gcc_64/bin/"
-          export CMAKE_PREFIX_PATH="${{github.workspace}}/qt/6.7.3/gcc_64/"
-          export QT_DIR="$QT_DIR:${{github.workspace}}/qt/6.7.3/gcc_64/lib/cmake/Qt6/"
+          #export PATH=$PATH:$( find ${{github.workspace}}/qt/6.7.3/ -type d -printf ":%p" )
+          #export QMAKE="${{github.workspace}}/qt/6.7.3/gcc_64/bin/"
+          #export CMAKE_PREFIX_PATH="${{github.workspace}}/qt/6.7.3/gcc_64/"
+          #export QT_DIR="$QT_DIR:${{github.workspace}}/qt/6.7.3/gcc_64/lib/cmake/Qt6/"
           mkdir -p "$HOME/.ccache"
           mkdir Build && cd Build
           cmake .. -GNinja -DCMAKE_C_COMPILER=gcc-11 -DCMAKE_CXX_COMPILER=g++-11 -DLINUX_LOCAL_DEV=true -DCMAKE_PREFIX_PATH="${GITHUB_WORKSPACE}/qt/6.7.3/gcc_64/" -DCMAKE_INSTALL_PREFIX="${{github.workspace}}/lucas/usr/"
@@ -112,7 +116,7 @@ jobs:
           find -iname ${GITHUB_WORKSPACE} 'libxcb-cursor**' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
           find ${GITHUB_WORKSPACE} -iname 'libqxcb**' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
           find ${GITHUB_WORKSPACE} -iname 'libQt6XcbQpa.so.6' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
-          ARCH=x86_64 VERSION=$VERSION2 ./appimagetool -n lucas2/
+          ARCH=x86_64 VERSION=git ./appimagetool -n lucas2/
 
       - name: release
         uses: "marvinpinto/action-automatic-releases@6273874b61ebc8c71f1a61b2d98e234cf389b303"
