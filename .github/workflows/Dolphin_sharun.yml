@@ -102,6 +102,7 @@ jobs:
           export PATH="$PATH:${{github.workspace}}"
           echo $PATH
           cd lucas2/
+          chmod a+x ./AppRun
           xvfb-run -a -- sharun lib4bin -p -v -r -e -s "${{github.workspace}}/lucas/usr/bin/dolphin-emu-nogui" "${{github.workspace}}/lucas/usr/bin/dolphin-tool" "${{github.workspace}}/lucas/usr/bin/dolphin-emu"
           sharun -g
           find "${{github.workspace}}/lucas2/shared/lib/home/" -type f | xargs -i -t -exec mv {} "${{github.workspace}}/lucas2/shared/lib 
