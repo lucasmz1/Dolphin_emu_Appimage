@@ -104,7 +104,7 @@ jobs:
           cd lucas2/
           chmod a+x ./AppRun
           xvfb-run -a -- sharun lib4bin -p -v -r -e -s "${{github.workspace}}/lucas/usr/bin/dolphin-emu-nogui" "${{github.workspace}}/lucas/usr/bin/dolphin-tool" "${{github.workspace}}/lucas/usr/bin/dolphin-emu"
-          sharun -g
+          ./sharun -g
           find "${{github.workspace}}/lucas2/shared/lib/home/" -type f | xargs -i -t -exec mv {} "${{github.workspace}}/lucas2/shared/lib" 
           cd ..
           find . -iname 'Sys' | xargs -i -t -exec cp -r {} ${GITHUB_WORKSPACE}/lucas2/bin/
