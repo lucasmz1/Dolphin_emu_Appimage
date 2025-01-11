@@ -47,7 +47,7 @@ jobs:
           sudo apt update && sudo apt install libfuse2 -y
           ####################################################################
           ##build without yaqti
-          sudo apt install xvfb libxcb-cursor0 build-essential git cmake ffmpeg libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libevdev-dev libusb-1.0-0-dev libxrandr-dev libxi-dev libpangocairo-1.0-0 qt6-base-private-dev libqt6svg6-dev libbluetooth-dev libasound2-dev libpulse-dev libgl1-mesa-dev libcurl4-openssl-dev sudo apt install libudev-dev libsystemd-dev || sudo apt install libeudev-dev
+          sudo apt install xvfb libxcb-cursor0 build-essential git cmake ffmpeg libqt6-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libevdev-dev libusb-1.0-0-dev libxrandr-dev libxi-dev libpangocairo-1.0-0 qt6-base-private-dev libqt6svg6-dev libbluetooth-dev libasound2-dev libpulse-dev libgl1-mesa-dev libcurl4-openssl-dev sudo apt install libudev-dev libsystemd-dev || sudo apt install libeudev-dev
           ####################################################################
           sudo apt-get install -y build-essential desktop-file-utils dialog dpkg libbluetooth-dev liblz4-dev liblzma-dev libssl-dev libopus-dev libpng-dev libsystemd-dev \
           libzip-dev libzstd-dev zlib1g-dev libasound2-dev libpulse-dev pulseaudio p7zip p7zip-full libsfml-dev libminiupnpc-dev libmbedtls-dev libpugixml-dev \
