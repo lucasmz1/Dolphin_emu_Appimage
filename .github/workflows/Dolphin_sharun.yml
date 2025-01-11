@@ -90,11 +90,11 @@ jobs:
           #export CMAKE_PREFIX_PATH="${{github.workspace}}/qt/6.7.3/gcc_64/"
           #export QT_DIR="$QT_DIR:${{github.workspace}}/qt/6.7.3/gcc_64/lib/cmake/Qt6/"
           mkdir -p "$HOME/.ccache"
+          mkdir -p /usr/local/share/dolphin-emu/sys /usr/local/bin
           mkdir Build && cd Build
           cmake .. -GNinja -DCMAKE_C_COMPILER=gcc-11 -DCMAKE_CXX_COMPILER=g++-11 -DLINUX_LOCAL_DEV=true
           ninja install
-          cd ..
-          cd ..
+          cd ../../
 
       # Runs a set of commands using the runners shell
       - name: Build appimage
@@ -104,6 +104,7 @@ jobs:
           cd lucas2/
           wget -q "$LIB4BN" -O ./lib4bin && chmod +x ./lib4bin
           xvfb-run -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
+          cp -r /usr/local/share/dolphin-emu/sys ./bin
           cd ..
           ARCH=x86_64 VERSION=git ./appimagetool -n lucas2/
 
