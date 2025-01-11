@@ -1,0 +1,121 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Sharun CI
+
+# Controls when the action will run. 
+on:
+  # Build at 00:00 on every 12th day-of-month.
+  schedule:
+    - cron: "0 0 */6 * *"
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ main ]
+    paths-ignore: [ '**/README.md' ]
+  pull_request:
+    branches: [ main ]
+    paths-ignore: [ '**/README.md' ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build-stable"
+  build-stable:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      - name: Prerequisites
+        run: |
+          curl -sLO https://files.pythonhosted.org/packages/47/42/351389ca36c7adfc5f4e92d086cdb2bdbde13f1b89ee882f4a1cab2183ac/yaqti-2021.7.29-py3-none-any.whl
+          python3 -m pip install yaqti-2021.7.29-py3-none-any.whl
+          pyver=$(python3 --version | awk '{print $2}')
+          cp fetchers.py $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/
+          python -m yaqti install --os linux --platform desktop --version 6.7.3 --modules linux_gcc_64 --set-envs --install-deps
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
+          sudo apt update
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+          sudo apt update
+          #wget https://apt.llvm.org/llvm.sh
+          #chmod +x llvm.sh
+          #sudo ./llvm.sh 16
+          sudo apt update && sudo apt install libfuse2 xvfb -y
+          sudo apt-get install -y build-essential desktop-file-utils dialog dpkg libbluetooth-dev liblz4-dev liblzma-dev libssl-dev libopus-dev libpng-dev libsystemd-dev \
+          libzip-dev libzstd-dev zlib1g-dev libasound2-dev libpulse-dev pulseaudio p7zip p7zip-full libsfml-dev libminiupnpc-dev libmbedtls-dev libpugixml-dev \
+          libbz2-dev liblzo2-dev libxi-dev libavcodec-dev libudev-dev libusb-1.0-0-dev libevdev-dev libc6-dev libhidapi-dev libavformat-dev libavdevice-dev \
+          libfmt-dev libwayland-dev libxrandr-dev libglu1-mesa-dev libcurl4-openssl-dev x11-utils zenity wget curl git gettext ccache make cmake ninja-build \
+          libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-icccm4 libxcb-image0-dev libxcb-cursor-dev
+          sudo apt install git cmake pkg-config gcc libwxbase3.0-dev mesa-common-dev libgtk2.0-dev libxext-dev libreadline-dev libglu1-mesa-dev libgl1-mesa-dev libevdev-dev libudev-dev -y
+          sudo apt-get install make cmake git g++ libgtk2.0-dev libsdl1.2-dev libxrandr-dev libxext-dev libao-dev libasound2-dev libpulse-dev libbluetooth-dev libreadline-gplv2-dev libavcodec-dev libavformat-dev libswscale-dev -y
+          sudo apt install --no-install-recommends ca-certificates ninja-build git cmake make g++-11 gcc-11 pkg-config libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libxi-dev libxrandr-dev libudev-dev libevdev-dev libsfml-dev libminiupnpc-dev libmbedtls-dev libcurl4-openssl-dev libhidapi-dev libsystemd-dev libbluetooth-dev libasound2-dev libpulse-dev libpugixml-dev libbz2-dev libzstd-dev liblzo2-dev libpng-dev libusb-1.0-0-dev gettext -y
+          sudo apt install git -y
+          sudo apt install libstdc++6 libc++-dev libc++abi-dev -y
+                    version=$(apt-cache pkgnames | sed -nr 's/^gcc-(([0-9]+\.?)+)$/\1/p' \
+                             | sort -n | tail -n1)
+          echo "The latest available GCC version: $version"
+          sudo apt-get install gcc-$version g++-$version
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$version 60 \
+          --slave   /usr/bin/g++ g++ /usr/bin/g++-$version
+          sudo apt remove --purge llvm-* clang-* -y
+          sudo apt autoremove -y
+          wget -q "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage" -O qtplugin ; chmod a+x qtplugin
+          wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O linuxdeploy ; chmod a+x linuxdeploy
+          wget -q "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
+          wget -q -c "https://github.com/VHSgunzo/sharun/releases/download/v0.2.3/sharun-x86_64" -O sharun ; chmod a+x sharun
+          git clone --filter="blob:none" --depth=1 -b master https://github.com/dolphin-emu/dolphin.git dolphin-emu
+          export VERSION2=$(git tag | tail -n 1)
+          mkdir lucas/
+          mkdir lucas/usr/
+          mkdir lucas/usr/lib/
+          mkdir -p lucas2/shared/lib/
+          find -name ${GITHUB_WORKSPACE} 'libxcb-cursor**' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
+          find ${GITHUB_WORKSPACE} -name 'libqxcb**' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
+          cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 ${{github.workspace}}/lucas2/shared/lib/
+          cp dolphin-emu.desktop dolphin-emu.png lucas2/
+          cd ./dolphin-emu
+          git submodule update --init --recursive
+          [ "${COMMIT:=}" ] && git fetch --unshallow --tags && git checkout "$COMMIT"
+          HEAD="$(git rev-parse --short HEAD)"
+          DATE="$(git show -s --format=%cd --date=format:%Y.%m.%d)"
+          VERSION="${DATE}_$HEAD"
+          export PATH=$PATH:$( find ${{github.workspace}}/qt/6.7.3/ -type d -printf ":%p" )
+          export QMAKE="${{github.workspace}}/qt/6.7.3/gcc_64/bin/"
+          export CMAKE_PREFIX_PATH="${{github.workspace}}/qt/6.7.3/gcc_64/"
+          export QT_DIR="$QT_DIR:${{github.workspace}}/qt/6.7.3/gcc_64/lib/cmake/Qt6/"
+          mkdir -p "$HOME/.ccache"
+          mkdir Build && cd Build
+          cmake .. -GNinja -DCMAKE_C_COMPILER=gcc-11 -DCMAKE_CXX_COMPILER=g++-11 -DLINUX_LOCAL_DEV=true -DCMAKE_PREFIX_PATH="${GITHUB_WORKSPACE}/qt/6.7.3/gcc_64/" -DCMAKE_INSTALL_PREFIX="${{github.workspace}}/lucas/usr/"
+          ninja install
+          cd ..
+          cd ..
+
+      # Runs a set of commands using the runners shell
+      - name: Build appimage
+        run: |
+          
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$( find ${{github.workspace}}/qt/6.7.3/ -type d -printf ":%p" )
+          echo $LD_LIBRARY_PATH
+          export PATH=$PATH:$( find ${{github.workspace}} -type d -printf ":%p" )
+          echo $PATH
+          cd lucas2/
+          xvfb-run -d -- sharun lib4bin -p -v -r -e -s "${{github.workspace}}/lucas/usr/bin/dolphin-emu" "${{github.workspace}}/lucas/usr/bin/dolphin-emu-nogui" "${{github.workspace}}/lucas/usr/bin/dolphin-tool"
+          ln -s ./bin/dolphin-emu ./AppRun
+          sharun -g
+          cd ..
+          find . -iname 'Sys' | xargs -i -t -exec cp -r {} ${GITHUB_WORKSPACE}/lucas2/bin/
+          ARCH=x86_64 VERSION=$VERSION2 ./appimagetool -n lucas2/
+
+      - name: release
+        uses: "marvinpinto/action-automatic-releases@6273874b61ebc8c71f1a61b2d98e234cf389b303"
+        with:
+          title: Continuous Sharun
+          automatic_release_tag: continuous-Sharun
+          prerelease: false
+          draft: false
+          files: /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/*.AppImage*
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
