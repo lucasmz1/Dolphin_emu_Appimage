@@ -73,10 +73,9 @@ jobs:
           mkdir lucas/usr/
           mkdir lucas/usr/lib/
           mkdir -p lucas2/shared/lib/
-          find -name ${GITHUB_WORKSPACE} 'libxcb-cursor**' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
-          find ${GITHUB_WORKSPACE} -name 'libqxcb**' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
           cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 ${{github.workspace}}/lucas2/shared/lib/
           cp dolphin-emu.desktop dolphin-emu.png lucas2/
+          cp ${{github.workspace}}/files/AppRun lucas2/
           cd ./dolphin-emu
           git submodule update --init --recursive
           [ "${COMMIT:=}" ] && git fetch --unshallow --tags && git checkout "$COMMIT"
@@ -103,11 +102,14 @@ jobs:
           export PATH="$PATH:${{github.workspace}}"
           echo $PATH
           cd lucas2/
-          xvfb-run -a -- sharun lib4bin -p -v -r -e -s "${{github.workspace}}/lucas/usr/bin/dolphin-emu" "${{github.workspace}}/lucas/usr/bin/dolphin-emu-nogui" "${{github.workspace}}/lucas/usr/bin/dolphin-tool"
-          ln -s ./bin/dolphin-emu ./AppRun
+          xvfb-run -a -- sharun lib4bin -p -v -r -e -s "${{github.workspace}}/lucas/usr/bin/dolphin-emu-nogui" "${{github.workspace}}/lucas/usr/bin/dolphin-tool" "${{github.workspace}}/lucas/usr/bin/dolphin-emu"
           sharun -g
+          find "${{github.workspace}}/lucas2/shared/lib/home/" -type f | xargs -i -t -exec mv {} "${{github.workspace}}/lucas2/shared/lib 
           cd ..
           find . -iname 'Sys' | xargs -i -t -exec cp -r {} ${GITHUB_WORKSPACE}/lucas2/bin/
+          find -iname ${GITHUB_WORKSPACE} 'libxcb-cursor**' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
+          find ${GITHUB_WORKSPACE} -iname 'libqxcb**' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
+          find ${GITHUB_WORKSPACE} -iname 'libQt6XcbQpa.so.6' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
           ARCH=x86_64 VERSION=$VERSION2 ./appimagetool -n lucas2/
 
       - name: release
