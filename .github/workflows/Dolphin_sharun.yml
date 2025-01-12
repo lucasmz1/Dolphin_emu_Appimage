@@ -33,148 +33,96 @@ jobs:
       - name: Prerequisites
         run: |
          sudo apt update && sudo apt install -y \
-         libfuse2 \
-         xvfb \
-         libxcb-cursor0 \
          build-essential \
-         git \
+         ca-certificates \
+         ccache \
          cmake \
-         ffmpeg \
-         libavcodec-dev \
-         libavformat-dev \
-         libavutil-dev \
-         libswscale-dev \
-         libevdev-dev \
-         libusb-1.0-0-dev \
-         libxrandr-dev \
-         libxi-dev \
-         libpangocairo-1.0-0 \
-         qt6-base-private-dev \
-         libqt6svg6-dev \
-         libbluetooth-dev \
-         libasound2-dev \
-         libpulse-dev \
-         libgl1-mesa-dev \
-         libcurl4-openssl-dev \
-         libudev-dev \
-         libsystemd-dev \
-         build-essential \
+         curl \
          desktop-file-utils \
          dialog \
          dpkg \
+         ffmpeg \
+         g++ \
+         g++-11 \
+         gcc \
+         gcc-11 \
+         gettext \
+         git \
+         libao-dev \
+         libasound2-dev \
+         libavcodec-dev \
+         libavdevice-dev \
+         libavformat-dev \
+         libavutil-dev \
          libbluetooth-dev \
+         libbz2-dev \
+         libc6-dev \
+         libc++abi-dev \
+         libc++-dev \
+         libcurl4-openssl-dev \
+         libevdev-dev \
+         libfmt-dev \
+         libfuse2 \
+         libgl1-mesa-dev \
+         libglu1-mesa-dev \
+         libgtk2.0-dev \
+         libhidapi-dev \
          liblz4-dev \
          liblzma-dev \
-         libssl-dev \
-         libopus-dev \
-         libpng-dev \
-         libsystemd-dev \
-         libzip-dev \
-         libzstd-dev \
-         zlib1g-dev \
-         libasound2-dev \
-         libpulse-dev \
-         pulseaudio \
-         p7zip \
-         p7zip-full \
-         libsfml-dev \
-         libminiupnpc-dev \
-         libmbedtls-dev \
-         libpugixml-dev \
-         libbz2-dev \
          liblzo2-dev \
-         libxi-dev \
-         libavcodec-dev \
+         libmbedtls-dev \
+         libminiupnpc-dev \
+         libopus-dev \
+         libpangocairo-1.0-0 \
+         libpipewire-0.3-0 \
+         libpipewire-0.3-modules \
+         libpng-dev \
+         libpugixml-dev \
+         libpulse-dev \
+         libqt6svg6-dev \
+         libreadline-dev \
+         libsdl1.2-dev \
+         libsfml-dev \
+         libspa-0.2-dev \
+         libspa-0.2-modules \
+         libssl-dev \
+         libstdc++6 \
+         libswscale-dev \
+         libsystemd-dev \
+         libudev-dev
          libudev-dev \
          libusb-1.0-0-dev \
-         libevdev-dev \
-         libc6-dev \
-         libhidapi-dev \
-         libavformat-dev \
-         libavdevice-dev \
-         libfmt-dev \
          libwayland-dev \
-         libxrandr-dev \
-         libglu1-mesa-dev \
-         libcurl4-openssl-dev \
-         x11-utils \
-         zenity \
-         wget \
-         curl \
-         git \
-         gettext \
-         ccache \
-         make \
-         cmake \
-         ninja-build \
+         libxcb-cursor0 \
+         libxcb-cursor-dev \
+         libxcb-icccm4 \
+         libxcb-image0-dev \
          libxcb-keysyms1 \
          libxcb-randr0 \
          libxcb-render-util0 \
-         libxcb-icccm4 \
-         libxcb-image0-dev \
-         libxcb-cursor-dev \
-         git \
-         cmake \
-         pkg-config \
-         gcc \
-         mesa-common-dev \
-         libgtk2.0-dev \
          libxext-dev \
-         libreadline-dev \
-         libglu1-mesa-dev \
-         libgl1-mesa-dev \
-         libevdev-dev \
-         libudev-dev \
-         make \
-         cmake \
-         git \
-         g++ \
-         libgtk2.0-dev \
-         libsdl1.2-dev \
-         libxrandr-dev \
-         libxext-dev \
-         libao-dev \
-         libasound2-dev \
-         libpulse-dev \
-         libbluetooth-dev \
-         libavcodec-dev \
-         libavformat-dev \
-         libswscale-dev \
-         ca-certificates \
-         ninja-build \
-         git \
-         cmake \
-         make \
-         g++-11 \
-         gcc-11 \
-         pkg-config \
-         libavcodec-dev \
-         libavformat-dev \
-         libavutil-dev \
-         libswscale-dev \
          libxi-dev \
          libxrandr-dev \
-         libudev-dev \
-         libevdev-dev \
-         libsfml-dev \
-         libminiupnpc-dev \
-         libmbedtls-dev \
-         libcurl4-openssl-dev \
-         libhidapi-dev \
-         libsystemd-dev \
-         libbluetooth-dev \
-         libasound2-dev \
-         libpulse-dev \
-         libpugixml-dev \
-         libbz2-dev \
+         libzip-dev \
          libzstd-dev \
-         liblzo2-dev \
-         libpng-dev \
-         libusb-1.0-0-dev \
-         gettext \
-         libstdc++6 \
-         libc++-dev \
-         libc++abi-dev
+         make \
+         mesa-common-dev \
+         mesa-utils \
+         mesa-vulkan-drivers \
+         ninja-build \
+         p7zip \
+         p7zip-full \
+         pipewire-alsa \
+         pipewire-audio-client-libraries \
+         pkg-config \
+         pulseaudio \
+         qt6-base-private-dev \
+         qt6ct \
+         wget \
+         x11-utils \
+         xvfb \
+         zenity \
+         zlib1g-dev
          version=$(apt-cache pkgnames | sed -nr 's/^gcc-(([0-9]+\.?)+)$/\1/p' \
                              | sort -n | tail -n1)
           echo "The latest available GCC version: $version"
