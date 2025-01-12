@@ -134,6 +134,12 @@ jobs:
           # Bundle alsa
           cp -vr /usr/lib/x86_64-linux-gnu/alsa-lib       ./shared/lib
 
+          # Bunble opengl and vulkan share files
+          mkdir -p ./share/vulkan
+          cp -vr /usr/share/glvnd          ./share
+          cp -vr /usr/share/vulkan/icd.d   ./share/vulkan
+          sed -i 's|/usr/lib||g;s|/.*-linux-gnu||g;s|"/|"|g' ./share/vulkan/icd.d/*
+
           # Prepare sharun
           ln ./sharun ./AppRun
           ./sharun -g
