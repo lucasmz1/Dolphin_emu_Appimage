@@ -87,12 +87,13 @@ jobs:
           ICON="https://github.com/dolphin-emu/dolphin/blob/master/Data/dolphin-emu.png?raw=true"
           UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
+
+          # Prepare AppDir and bundle all libraries
+          cd lucas2/
           wget -q --retry-connrefused --tries=30 "$DESKTOP" -O ./dolphin-emu.desktop
           wget -q --retry-connrefused --tries=30 "$ICON" -O ./dolphin-emu.png
-
-          # Bundle all libraries
-          cd lucas2/
-          wget -q --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin && chmod +x ./lib4bin
+          wget -q --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
+          chmod +x ./lib4bin
           xvfb-run -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
 
           # for some reason the dir needs a capital S?
@@ -116,7 +117,8 @@ jobs:
           cd ..
           
           # Make AppImage with the static appimage runtime (removes libfuse2 dependency).
-          wget -q --retry-connrefused --tries=30 "$APPIMAGETOOL" -O ./appimagetool && chmod +x ./appimagetool
+          wget -q --retry-connrefused --tries=30 "$APPIMAGETOOL" -O ./appimagetool 
+          chmod +x ./appimagetool
           ./appimagetool -n -u "$UPINFO" lucas2/
 
       - name: release
