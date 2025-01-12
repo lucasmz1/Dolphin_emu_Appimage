@@ -110,7 +110,7 @@ jobs:
           # Bundle all libs
           wget -q --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
           chmod +x ./lib4bin
-          xvfb-run -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
+          xvfb-run -a -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
 
           # for some reason the dir needs a capital S?
           cp -r /usr/local/share/dolphin-emu/sys ./bin/Sys
@@ -135,10 +135,10 @@ jobs:
           cp -vr /usr/lib/x86_64-linux-gnu/alsa-lib       ./shared/lib
 
           # Bunble opengl and vulkan share files
-          mkdir -p ./share/vulkan
-          cp -vr /usr/share/glvnd          ./share
-          cp -vr /usr/share/vulkan/icd.d   ./share/vulkan
-          sed -i 's|/usr/lib||g;s|/.*-linux-gnu||g;s|"/|"|g' ./share/vulkan/icd.d/*
+          #mkdir -p ./share/vulkan
+          #cp -vr /usr/share/glvnd          ./share
+          #cp -vr /usr/share/vulkan/icd.d   ./share/vulkan
+          #sed -i 's|/usr/lib||g;s|/.*-linux-gnu||g;s|"/|"|g' ./share/vulkan/icd.d/*
 
           # Prepare sharun
           ln ./sharun ./AppRun
