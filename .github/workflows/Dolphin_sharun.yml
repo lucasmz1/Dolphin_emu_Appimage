@@ -87,7 +87,6 @@ jobs:
           ICON="https://github.com/dolphin-emu/dolphin/blob/master/Data/dolphin-emu.png?raw=true"
           UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
-
           # Prepare AppDir
           cd lucas2/
           cat <<-'HEREDOC' > ./dolphin-emu.desktop
@@ -127,7 +126,8 @@ jobs:
             | awk -F"[> ]" '{print $4}' | xargs -I {} cp -nv {} ./shared/lib || true
 
           # Bundle pipewire
-          
+          cp -r /usr/lib/x86_64-linux-gnu/pipewire-0.3   ./shared/lib
+          cp -r /usr/lib/x86_64-linux-gnu/spa-0.2        ./shared/lib
 
           # Prepare sharun
           ln ./sharun ./AppRun
