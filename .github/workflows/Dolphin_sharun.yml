@@ -36,7 +36,7 @@ jobs:
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo apt update
-          sudo apt install -y xvfb qt6ct libxcb-cursor0 build-essential git cmake ffmpeg \
+          sudo apt install -y xvfb qt6ct libspa-0.2-dev libpipewire-0.3-0 libxcb-cursor0 build-essential git cmake ffmpeg \
             libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libevdev-dev libusb-1.0-0-dev \
             libxrandr-dev libxi-dev libpangocairo-1.0-0 qt6-base-private-dev libqt6svg6-dev libbluetooth-dev \
             libasound2-dev libpulse-dev libgl1-mesa-dev libcurl4-openssl-dev libsystemd-dev
@@ -83,15 +83,30 @@ jobs:
           export ARCH="$(uname -m)"
           APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-$ARCH.AppImage"
           LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
-          DESKTOP="https://raw.githubusercontent.com/dolphin-emu/dolphin/refs/heads/master/Data/dolphin-emu.desktop"
+          #DESKTOP="https://raw.githubusercontent.com/dolphin-emu/dolphin/refs/heads/master/Data/dolphin-emu.desktop"
           ICON="https://github.com/dolphin-emu/dolphin/blob/master/Data/dolphin-emu.png?raw=true"
           UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
 
-          # Prepare AppDir and bundle all libraries
+          # Prepare AppDir
           cd lucas2/
-          wget -q --retry-connrefused --tries=30 "$DESKTOP" -O ./dolphin-emu.desktop
+          cat <<-'HEREDOC' > ./dolphin-emu.desktop
+          [Desktop Entry]
+          Version=1.0
+          Icon=dolphin-emu
+          Exec=dolphin-emu
+          Terminal=false
+          Type=Application
+          Categories=Game;Emulator;
+          Name=Dolphin Emulator
+          GenericName=Wii/GameCube Emulator
+          StartupWMClass=dolphin-emu
+          Comment=A Wii/GameCube Emulator
+          X-AppImage-Version=5.0-16793
+          HEREDOC
           wget -q --retry-connrefused --tries=30 "$ICON" -O ./dolphin-emu.png
+
+          # Bundle all libs
           wget -q --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
           chmod +x ./lib4bin
           xvfb-run -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
@@ -110,6 +125,9 @@ jobs:
           cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/wayland-*         ./shared/lib/qt6/plugins || true
           ldd ./shared/lib/qt6/plugins/*/* 2>/dev/null \
             | awk -F"[> ]" '{print $4}' | xargs -I {} cp -nv {} ./shared/lib || true
+
+          # Bundle pipewire
+          
 
           # Prepare sharun
           ln ./sharun ./AppRun
