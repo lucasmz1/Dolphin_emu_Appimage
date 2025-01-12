@@ -149,6 +149,10 @@ jobs:
           cp -vr /usr/share/vulkan/icd.d   ./share/vulkan
           sed -i 's|/usr/lib||g;s|/.*-linux-gnu||g;s|"/|"|g' ./share/vulkan/icd.d/*
 
+          if [ -f ./shared/lib/libLLVM-17.so.1 ]; then
+            ln -s ./libLLVM-17.so.1 ./shared/lib/libLLVM.so.18.1 || true
+          fi 
+
           # Prepare sharun
           ln ./sharun ./AppRun
           ./sharun -g
