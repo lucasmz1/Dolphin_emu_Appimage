@@ -71,7 +71,6 @@ jobs:
           mkdir -p lucas/usr/lib/
           mkdir -p lucas2/shared/lib/
           cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 ${{github.workspace}}/lucas2/shared/lib/
-          cp dolphin-emu.desktop dolphin-emu.png lucas2/
           cd ./dolphin-emu
           git submodule update --init --recursive
           [ "${COMMIT:=}" ] && git fetch --unshallow --tags && git checkout "$COMMIT"
@@ -87,15 +86,20 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build appimage
         run: |
+          export PATH="$PATH:${{github.workspace}}"
+          export APPIMAGE_EXTRACT_AND_RUN=1
           export ARCH="$(uname -m)"
           APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-$ARCH.AppImage"
           LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
-          export PATH="$PATH:${{github.workspace}}"
-          export APPIMAGE_EXTRACT_AND_RUN=1
+          DESKTOP="https://raw.githubusercontent.com/dolphin-emu/dolphin/refs/heads/master/Data/dolphin-emu.desktop"
+          ICON="https://github.com/dolphin-emu/dolphin/blob/master/Data/dolphin-emu.png?raw=true"
+
+          wget -q --retry-connrefused --tries=30 "$DESKTOP" -O ./dolphin-emu.desktop
+          wget -q --retry-connrefused --tries=30 "$ICON" -O ./dolphin-emu.png
 
           # Bundle all libraries
           cd lucas2/
-          wget -q "$LIB4BN" -O ./lib4bin && chmod +x ./lib4bin
+          wget -q --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin && chmod +x ./lib4bin
           xvfb-run -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
 
           # for some reason the dir needs a capital S?
@@ -114,7 +118,7 @@ jobs:
             | awk -F"[> ]" '{print $4}' | xargs -I {} cp -nv {} ./shared/lib || true
 
           # Prepare sharun
-          ln -s ./sharun ./AppRun
+          ln ./sharun ./AppRun
           ./sharun -g
           cd ..
           
