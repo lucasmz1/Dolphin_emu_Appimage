@@ -67,9 +67,6 @@ jobs:
           --slave   /usr/bin/g++ g++ /usr/bin/g++-$version
           sudo apt remove --purge llvm-* clang-* -y
           sudo apt autoremove -y
-          wget -q "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage" -O qtplugin ; chmod a+x qtplugin
-          wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O linuxdeploy ; chmod a+x linuxdeploy
-          wget -q "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
           git clone --filter="blob:none" --depth=1 -b master https://github.com/dolphin-emu/dolphin.git dolphin-emu
           #export VERSION2=$(git tag | tail -n 1)
           mkdir -p lucas/usr/lib/
