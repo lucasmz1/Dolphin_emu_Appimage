@@ -41,10 +41,6 @@ jobs:
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo apt update
-          #wget https://apt.llvm.org/llvm.sh
-          #chmod +x llvm.sh
-          #sudo ./llvm.sh 16
-          sudo apt update && sudo apt install libfuse2 -y
           ####################################################################
           ##build without yaqti
           sudo apt install -y xvfb qt6ct libxcb-cursor0 build-essential git cmake ffmpeg \
@@ -92,7 +88,7 @@ jobs:
       - name: Build appimage
         run: |
           LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
-          export PATH="$PATH:${{github.workspace}}"
+          export PATH="$PATH:${{github.workspace}}" APPIMAGE_EXTRACT_AND_RUN=1
           cd lucas2/
           wget -q "$LIB4BN" -O ./lib4bin && chmod +x ./lib4bin
           xvfb-run -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
