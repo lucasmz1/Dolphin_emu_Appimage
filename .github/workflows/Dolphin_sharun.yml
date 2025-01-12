@@ -85,6 +85,7 @@ jobs:
           LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
           DESKTOP="https://raw.githubusercontent.com/dolphin-emu/dolphin/refs/heads/master/Data/dolphin-emu.desktop"
           ICON="https://github.com/dolphin-emu/dolphin/blob/master/Data/dolphin-emu.png?raw=true"
+          UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
           wget -q --retry-connrefused --tries=30 "$DESKTOP" -O ./dolphin-emu.desktop
           wget -q --retry-connrefused --tries=30 "$ICON" -O ./dolphin-emu.png
@@ -115,8 +116,8 @@ jobs:
           cd ..
           
           # Make AppImage with the static appimage runtime (removes libfuse2 dependency).
-          wget -q "$APPIMAGETOOL" -O ./appimagetool && chmod +x ./appimagetool
-          ./appimagetool -n lucas2/
+          wget -q --retry-connrefused --tries=30 "$APPIMAGETOOL" -O ./appimagetool && chmod +x ./appimagetool
+          ./appimagetool -n -u "$UPINFO" lucas2/
 
       - name: release
         uses: "marvinpinto/action-automatic-releases@6273874b61ebc8c71f1a61b2d98e234cf389b303"
