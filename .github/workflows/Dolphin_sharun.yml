@@ -32,17 +32,10 @@ jobs:
 
       - name: Prerequisites
         run: |
-          #curl -sLO https://files.pythonhosted.org/packages/47/42/351389ca36c7adfc5f4e92d086cdb2bdbde13f1b89ee882f4a1cab2183ac/yaqti-2021.7.29-py3-none-any.whl
-          #python3 -m pip install yaqti-2021.7.29-py3-none-any.whl
-          #pyver=$(python3 --version | awk '{print $2}')
-          #cp fetchers.py $HOME/.local/lib/python${pyver%.*}/site-packages/yaqti/
-          #python -m yaqti install --os linux --platform desktop --version 6.7.3 --modules linux_gcc_64 --set-envs --install-deps
           sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo apt update
-          ####################################################################
-          ##build without yaqti
           sudo apt install -y xvfb qt6ct libxcb-cursor0 build-essential git cmake ffmpeg \
             libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libevdev-dev libusb-1.0-0-dev \
             libxrandr-dev libxi-dev libpangocairo-1.0-0 qt6-base-private-dev libqt6svg6-dev libbluetooth-dev \
@@ -62,8 +55,7 @@ jobs:
                              | sort -n | tail -n1)
           echo "The latest available GCC version: $version"
           sudo apt-get install gcc-$version g++-$version
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$version 60 \
-          --slave   /usr/bin/g++ g++ /usr/bin/g++-$version
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$version 60 --slave /usr/bin/g++ g++ /usr/bin/g++-$version
           sudo apt remove --purge llvm-* clang-* -y
           sudo apt autoremove -y
           git clone --filter="blob:none" --depth=1 -b master https://github.com/dolphin-emu/dolphin.git dolphin-emu
