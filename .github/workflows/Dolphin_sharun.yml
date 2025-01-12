@@ -36,7 +36,7 @@ jobs:
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo apt update
-          sudo apt install -y xvfb qt6ct libspa-0.2-dev libpipewire-0.3-0 libpipewire-0.3-modules \
+          sudo apt install -y xvfb mesa-vulkan-drivers qt6ct libspa-0.2-dev libpipewire-0.3-0 libpipewire-0.3-modules \
             libspa-0.2-modules libxcb-cursor0 build-essential git cmake ffmpeg mesa-utils pipewire-audio-client-libraries \
             libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libevdev-dev libusb-1.0-0-dev \
             libxrandr-dev libxi-dev libpangocairo-1.0-0 qt6-base-private-dev libqt6svg6-dev libbluetooth-dev \
@@ -110,22 +110,22 @@ jobs:
           # Bundle all libs
           wget -q --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
           chmod +x ./lib4bin
-          xvfb-run --auto-servernum --server-num=1 -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
+          xvfb-run -a -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
 
           # for some reason the dir needs a capital S?
           cp -r /usr/local/share/dolphin-emu/sys ./bin/Sys
 
           # Deploy Qt manually xd
-          #mkdir -p ./shared/lib/qt6/plugins
-          #cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/iconengines       ./shared/lib/qt6/plugins
-          #cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/imageformats      ./shared/lib/qt6/plugins
-          #cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms         ./shared/lib/qt6/plugins
-          #cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes    ./shared/lib/qt6/plugins || true
-          #cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/styles            ./shared/lib/qt6/plugins
-          #cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/xcbglintegrations ./shared/lib/qt6/plugins
-          #cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/wayland-*         ./shared/lib/qt6/plugins || true
-          #ldd ./shared/lib/qt6/plugins/*/* 2>/dev/null \
-          #  | awk -F"[> ]" '{print $4}' | xargs -I {} cp -nv {} ./shared/lib || true
+          mkdir -p ./shared/lib/qt6/plugins
+          cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/iconengines       ./shared/lib/qt6/plugins
+          cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/imageformats      ./shared/lib/qt6/plugins
+          cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms         ./shared/lib/qt6/plugins
+          cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes    ./shared/lib/qt6/plugins || true
+          cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/styles            ./shared/lib/qt6/plugins
+          cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/xcbglintegrations ./shared/lib/qt6/plugins
+          cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/wayland-*         ./shared/lib/qt6/plugins || true
+          ldd ./shared/lib/qt6/plugins/*/* 2>/dev/null \
+            | awk -F"[> ]" '{print $4}' | xargs -I {} cp -nv {} ./shared/lib || true
 
           # Bundle pipewire and alsa
           cp -vr /usr/lib/x86_64-linux-gnu/pipewire-0.3   ./shared/lib
@@ -133,10 +133,10 @@ jobs:
           cp -vr /usr/lib/x86_64-linux-gnu/alsa-lib       ./shared/lib
 
           # Bunble opengl and vulkan share files
-          #mkdir -p ./share/vulkan
-          #cp -vr /usr/share/glvnd          ./share
-          #cp -vr /usr/share/vulkan/icd.d   ./share/vulkan
-          #sed -i 's|/usr/lib||g;s|/.*-linux-gnu||g;s|"/|"|g' ./share/vulkan/icd.d/*
+          mkdir -p ./share/vulkan
+          cp -vr /usr/share/glvnd          ./share
+          cp -vr /usr/share/vulkan/icd.d   ./share/vulkan
+          sed -i 's|/usr/lib||g;s|/.*-linux-gnu||g;s|"/|"|g' ./share/vulkan/icd.d/*
 
           # Prepare sharun
           ln ./sharun ./AppRun
