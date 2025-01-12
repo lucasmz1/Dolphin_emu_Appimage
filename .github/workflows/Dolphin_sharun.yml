@@ -36,7 +36,7 @@ jobs:
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo apt update
-          sudo apt install -y xvfb mesa-vulkan-drivers qt6ct libspa-0.2-dev libpipewire-0.3-0 libpipewire-0.3-modules \
+          sudo apt install -y xvfb mesa-vulkan-drivers qt6ct pipewire-alsa libspa-0.2-dev libpipewire-0.3-0 libpipewire-0.3-modules \
             libspa-0.2-modules libxcb-cursor0 build-essential git cmake ffmpeg mesa-utils pipewire-audio-client-libraries \
             libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libevdev-dev libusb-1.0-0-dev \
             libxrandr-dev libxi-dev libpangocairo-1.0-0 qt6-base-private-dev libqt6svg6-dev libbluetooth-dev \
