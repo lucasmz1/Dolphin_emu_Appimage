@@ -132,6 +132,12 @@ jobs:
           cp -vr /usr/lib/x86_64-linux-gnu/spa-0.2        ./shared/lib
           cp -vr /usr/lib/x86_64-linux-gnu/alsa-lib       ./shared/lib
 
+          # add gpu libs
+          cp -vr /usr/lib/x86_64-linux-gnu/dri            ./shared/lib
+          cp -vn /usr/lib/x86_64-linux-gnu/libvulkan*     ./shared/lib
+          ldd ./shared/lib/dri/* ./shared/lib/libvulkan* 2>/dev/null \
+            | awk -F"[> ]" '{print $4}' | xargs -I {} cp -nv {} ./shared/lib || true
+
           # Bunble opengl and vulkan share files
           mkdir -p ./share/vulkan
           cp -vr /usr/share/glvnd          ./share
