@@ -87,6 +87,8 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build appimage
         run: |
+          export ARCH="$(uname -m)"
+          APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-$ARCH.AppImage"
           LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
           export PATH="$PATH:${{github.workspace}}"
           export APPIMAGE_EXTRACT_AND_RUN=1
@@ -117,7 +119,8 @@ jobs:
           cd ..
           
           # Make AppImage with the static appimage runtime (removes libfuse2 dependency).
-          ARCH="$(uname -m)" VERSION=git ./appimagetool -n lucas2/
+          wget -q "$APPIMAGETOOL" -O ./appimagetool && chmod +x ./appimagetool
+          ./appimagetool -n lucas2/
 
       - name: release
         uses: "marvinpinto/action-automatic-releases@6273874b61ebc8c71f1a61b2d98e234cf389b303"
