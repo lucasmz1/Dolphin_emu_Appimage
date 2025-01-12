@@ -88,11 +88,18 @@ jobs:
       - name: Build appimage
         run: |
           LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
-          export PATH="$PATH:${{github.workspace}}" APPIMAGE_EXTRACT_AND_RUN=1
+          export PATH="$PATH:${{github.workspace}}"
+          export APPIMAGE_EXTRACT_AND_RUN=1
+
+          # Bundle all libraries
           cd lucas2/
           wget -q "$LIB4BN" -O ./lib4bin && chmod +x ./lib4bin
           xvfb-run -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
+
+          # for some reason the dir needs a capital S?
           cp -r /usr/local/share/dolphin-emu/sys ./bin/Sys
+
+          # Deploy Qt manually xd
           mkdir -p ./shared/lib/qt6/plugins
           cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/iconengines       ./shared/lib/qt6/plugins
           cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/imageformats      ./shared/lib/qt6/plugins
@@ -103,9 +110,13 @@ jobs:
           cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/wayland-*         ./shared/lib/qt6/plugins || true
           ldd ./shared/lib/qt6/plugins/*/* 2>/dev/null \
             | awk -F"[> ]" '{print $4}' | xargs -I {} cp -nv {} ./shared/lib || true
+
+          # Prepare sharun
           ln -s ./sharun ./AppRun
           ./sharun -g
           cd ..
+          
+          # Make AppImage with the static appimage runtime (removes libfuse2 dependency).
           ARCH="$(uname -m)" VERSION=git ./appimagetool -n lucas2/
 
       - name: release
