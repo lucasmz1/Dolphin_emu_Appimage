@@ -110,9 +110,7 @@ jobs:
           # Bundle all libs
           wget -q --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
           chmod +x ./lib4bin
-          xvfb-run --auto-servernum --server-num=1 \
-            --server-args="-screen 0 1024x768x24" -- \ 
-            ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
+          xvfb-run --auto-servernum --server-num=1 -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
 
           # for some reason the dir needs a capital S?
           cp -r /usr/local/share/dolphin-emu/sys ./bin/Sys
