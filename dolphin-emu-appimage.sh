@@ -25,7 +25,6 @@ GenericName=Wii/GameCube Emulator
 StartupWMClass=dolphin-emu
 Comment=A Wii/GameCube Emulator
 X-AppImage-Version=5.0-16793' > ./dolphin-emu.desktop
-HEREDOC
 
 wget --retry-connrefused --tries=30 "$ICON" -O ./dolphin-emu.png
 
