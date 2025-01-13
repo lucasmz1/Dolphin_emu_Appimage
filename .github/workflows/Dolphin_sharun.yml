@@ -31,10 +31,10 @@ jobs:
         run: |
           sed -i 's/DownloadUser/#DownloadUser/g' /etc/pacman.conf
           pacman -Syu --noconfirm \
-                base-devel 
-                strace 
-                patchelf 
-                curl 
+                base-devel \
+                strace \
+                patchelf \ 
+                curl \
                 wget \
                 git \
                 artix-archlinux-support \
