@@ -71,6 +71,14 @@ cp -vr /usr/share/glvnd          ./share
 cp -vr /usr/share/vulkan/icd.d   ./share/vulkan
 sed -i 's|/usr/lib||g;s|/.*-linux-gnu||g;s|"/|"|g' ./share/vulkan/icd.d/*
 
+# Fix dolphin having a full hardcoded path /usr/share/dolphin-emu/sys
+git clone https://github.com/fritzw/ld-preload-open.git preload.tmp
+( cd preload.tmp && make all && mv ./path-mapping.so ../ )
+rm -rf ./preload.tmp
+
+echo 'PATH_MAPPING="/usr/share/dolphin-emu/sys:${SHARUN_DIR}/bin/Sys"
+LD_PRELOAD=${SHARUN_DIR}/path-mapping.so' > ./.env
+
 # Prepare sharun
 ln ./sharun ./AppRun
 ./sharun -g
