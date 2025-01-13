@@ -2,7 +2,6 @@
 
 set -eu
 
-export PATH="$PATH:${{github.workspace}}"
 export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH="$(uname -m)"
 APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-$ARCH.AppImage"
