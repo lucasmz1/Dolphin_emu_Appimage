@@ -61,10 +61,6 @@ jobs:
           sudo apt remove --purge llvm-* clang-* -y
           sudo apt autoremove -y
           git clone --filter="blob:none" --depth=1 -b master https://github.com/dolphin-emu/dolphin.git dolphin-emu
-          #export VERSION2=$(git tag | tail -n 1)
-          mkdir -p lucas/usr/lib/
-          mkdir -p lucas2/shared/lib/
-          cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 ${{github.workspace}}/lucas2/shared/lib/
           cd ./dolphin-emu
           git submodule update --init --recursive
           [ "${COMMIT:=}" ] && git fetch --unshallow --tags && git checkout "$COMMIT"
