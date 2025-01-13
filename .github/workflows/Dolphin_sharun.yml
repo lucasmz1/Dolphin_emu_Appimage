@@ -36,30 +36,21 @@ jobs:
           sudo apt update
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo apt update
-          sudo apt install -y xvfb mesa-vulkan-drivers qt6ct pipewire-alsa libspa-0.2-dev libpipewire-0.3-0 libpipewire-0.3-modules \
-            libspa-0.2-modules libxcb-cursor0 build-essential git cmake ffmpeg mesa-utils pipewire-audio-client-libraries \
-            libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libevdev-dev libusb-1.0-0-dev \
+          sudo apt install -y libstdc++6 libc++-dev libc++abi-dev make cmake gcc g++ ninja-build xvfb wget curl mesa-vulkan-drivers \
+            qt6ct pipewire-alsa libspa-0.2-dev libpipewire-0.3-0 libpipewire-0.3-modules mesa-common-dev \
+            libspa-0.2-modules libxcb-cursor0 build-essential git ffmpeg mesa-utils pipewire-audio-client-libraries \
+            libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libevdev-dev libusb-1.0-0-dev libglu1-mesa-dev libwayland-dev \
             libxrandr-dev libxi-dev libpangocairo-1.0-0 qt6-base-private-dev libqt6svg6-dev libbluetooth-dev \
-            libasound2-dev libpulse-dev libgl1-mesa-dev libcurl4-openssl-dev libsystemd-dev
+            libasound2-dev libpulse-dev libgl1-mesa-dev libcurl4-openssl-dev libsystemd-dev x11-utils libxcb-keysyms1 libxcb-randr0 \
+            libxcb-render-util0 libxcb-icccm4 libxcb-image0-dev libxcb-cursor-dev libsdl1.2-dev libxext-dev libao-dev 
           ####################################################################
-          sudo apt-get install -y build-essential desktop-file-utils dialog dpkg liblz4-dev liblzma-dev libssl-dev libopus-dev libpng-dev \
-          libzip-dev libzstd-dev zlib1g-dev pulseaudio p7zip p7zip-full libsfml-dev libminiupnpc-dev libmbedtls-dev libpugixml-dev \
-          libbz2-dev liblzo2-dev libc6-dev libhidapi-dev libavdevice-dev \
-          libfmt-dev libwayland-dev libglu1-mesa-dev x11-utils zenity wget curl git gettext ccache make cmake ninja-build \
-          libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-icccm4 libxcb-image0-dev libxcb-cursor-dev
-          sudo apt install git cmake pkg-config gcc mesa-common-dev libxext-dev libreadline-dev libglu1-mesa-dev libudev-dev -y
-          sudo apt-get install make cmake git g++ libsdl1.2-dev libxext-dev libao-dev -y
-          sudo apt install --no-install-recommends ca-certificates ninja-build git cmake make g++-11 gcc-11 pkg-config libudev-dev \
+          sudo apt-get install -y build-essential dialog dpkg liblz4-dev liblzma-dev libssl-dev libopus-dev libpng-dev \
+          libzip-dev libzstd-dev zlib1g-dev p7zip p7zip-full libsfml-dev libminiupnpc-dev libmbedtls-dev libpugixml-dev \
+          libbz2-dev liblzo2-dev libc6-dev libhidapi-dev libavdevice-dev libfmt-dev gettext ccache
+          sudo apt install pkg-config gcc libxext-dev libreadline-dev libglu1-mesa-dev libudev-dev -y
+          sudo apt install --no-install-recommends ca-certificates ninja-build git cmake make pkg-config libudev-dev \
             libsfml-dev libminiupnpc-dev libmbedtls-dev libhidapi-dev libpugixml-dev libbz2-dev libzstd-dev liblzo2-dev libpng-dev -y
-          sudo apt install git -y
-          sudo apt install libstdc++6 libc++-dev libc++abi-dev -y
-                    version=$(apt-cache pkgnames | sed -nr 's/^gcc-(([0-9]+\.?)+)$/\1/p' \
-                             | sort -n | tail -n1)
-          echo "The latest available GCC version: $version"
-          sudo apt-get install gcc-$version g++-$version
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$version 60 --slave /usr/bin/g++ g++ /usr/bin/g++-$version
-          sudo apt remove --purge llvm-* clang-* -y
-          sudo apt autoremove -y
+
           git clone --filter="blob:none" --depth=1 -b master https://github.com/dolphin-emu/dolphin.git dolphin-emu
           cd ./dolphin-emu
           git submodule update --init --recursive
@@ -76,8 +67,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build appimage
         run: |
-          echo "$PWD"
-          ls .
           chmod +x ./dolphin-emu-appimage.sh 
           ./dolphin-emu-appimage.sh
 
