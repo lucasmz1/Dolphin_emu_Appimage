@@ -32,33 +32,33 @@ wget --retry-connrefused --tries=30 "$ICON" -O ./dolphin-emu.png
 wget --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
 chmod +x ./lib4bin
 
-xvfb-run -a -- ./lib4bin -p -v -r -e -s -k /usr/bin/dolphin-*
+xvfb-run -a -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
 
 # for some reason the dir needs a capital S?
-cp -r /usr/share/dolphin-emu/sys ./bin/Sys
+cp -r /usr/local/share/dolphin-emu/sys ./bin/Sys
 
 # Deploy Qt manually xd
 mkdir -p ./shared/lib/qt6/plugins
-cp -vr /usr/lib/qt6/plugins/iconengines       ./shared/lib/qt6/plugins
-cp -vr /usr/lib/qt6/plugins/imageformats      ./shared/lib/qt6/plugins
-cp -vr /usr/lib/qt6/plugins/platforms         ./shared/lib/qt6/plugins
-cp -vr /usr/lib/qt6/plugins/platformthemes    ./shared/lib/qt6/plugins || true
-cp -vr /usr/lib/qt6/plugins/styles            ./shared/lib/qt6/plugins
-cp -vr /usr/lib/qt6/plugins/xcbglintegrations ./shared/lib/qt6/plugins
-cp -vr /usr/lib/qt6/plugins/wayland-*         ./shared/lib/qt6/plugins || true
+cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/iconengines       ./shared/lib/qt6/plugins
+cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/imageformats      ./shared/lib/qt6/plugins
+cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms         ./shared/lib/qt6/plugins
+cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes    ./shared/lib/qt6/plugins || true
+cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/styles            ./shared/lib/qt6/plugins
+cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/xcbglintegrations ./shared/lib/qt6/plugins
+cp -vr /usr/lib/x86_64-linux-gnu/qt6/plugins/wayland-*         ./shared/lib/qt6/plugins || true
 ldd ./shared/lib/qt6/plugins/*/* 2>/dev/null \
   | awk -F"[> ]" '{print $4}' | xargs -I {} cp -nv {} ./shared/lib || true
 
 # Bundle pipewire and alsa
-cp -vr /usr/lib/pipewire-0.3   ./shared/lib
-cp -vr /usr/lib/spa-0.2        ./shared/lib
-cp -vr /usr/lib/alsa-lib       ./shared/lib
+cp -vr /usr/lib/x86_64-linux-gnu/pipewire-0.3   ./shared/lib
+cp -vr /usr/lib/x86_64-linux-gnu/spa-0.2        ./shared/lib
+cp -vr /usr/lib/x86_64-linux-gnu/alsa-lib       ./shared/lib
 
 # add gpu libs
-cp -vr /usr/lib/libGLX*        ./shared/lib || true
-cp -vr /usr/lib/libEGL*        ./shared/lib || true
-cp -vr /usr/lib/dri            ./shared/lib
-cp -vn /usr/lib/libvulkan*     ./shared/lib
+cp -vr /usr/lib/x86_64-linux-gnu/libGLX*        ./shared/lib || true
+cp -vr /usr/lib/x86_64-linux-gnu/libEGL*        ./shared/lib || true
+cp -vr /usr/lib/x86_64-linux-gnu/dri            ./shared/lib
+cp -vn /usr/lib/x86_64-linux-gnu/libvulkan*     ./shared/lib
 ldd ./shared/lib/dri/* \
 	./shared/lib/libvulkan* \
 	./shared/lib/libEGL* \
@@ -70,6 +70,10 @@ mkdir -p ./share/vulkan
 cp -vr /usr/share/glvnd          ./share
 cp -vr /usr/share/vulkan/icd.d   ./share/vulkan
 sed -i 's|/usr/lib||g;s|/.*-linux-gnu||g;s|"/|"|g' ./share/vulkan/icd.d/*
+
+if [ -f ./shared/lib/libLLVM-17.so.1 ]; then
+	ln -s ./libLLVM-17.so.1 ./shared/lib/libLLVM.so.18.1 || true
+fi
 
 # Prepare sharun
 ln ./sharun ./AppRun
