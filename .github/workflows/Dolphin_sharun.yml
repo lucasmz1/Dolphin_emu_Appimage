@@ -30,12 +30,24 @@ jobs:
       - name: Prerequisites
         run: |
           sed -i 's/DownloadUser/#DownloadUser/g' /etc/pacman.conf
-          pacman -Syu --noconfirm base-devel strace patchelf curl wget git artix-archlinux-support llvm mesa xorg-server-xvfb vulkan-radeon vulkan-intel vulkan-nouveau
+          pacman -Syu --noconfirm base-devel \
+            strace \
+            patchelf \
+            curl \
+            wget \
+            git \
+            artix-archlinux-support \
+            llvm \
+            mesa \
+            xorg-server-xvfb \
+            vulkan-radeon \
+            vulkan-intel \
+            vulkan-nouveau
 
           pacman-key --init && pacman-key --populate archlinux
           printf "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n" | tee -a /etc/pacman.conf
           pacman -Syu --noconfirm \
-                zsync \
+            zsync \
                 alsa-lib \ 
                 cmake \
                 libevdev \
