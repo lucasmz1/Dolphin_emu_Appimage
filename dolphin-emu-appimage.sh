@@ -49,7 +49,9 @@ cp -vr /usr/lib/qt6/plugins/wayland-*         ./shared/lib/qt6/plugins || true
 ldd ./shared/lib/qt6/plugins/*/* 2>/dev/null \
   | awk -F"[> ]" '{print $4}' | xargs -I {} cp -nv {} ./shared/lib || true
 
-# Bundle alsa
+# Bundle pipewire and alsa
+cp -vr /usr/lib/pipewire-0.3   ./shared/lib
+cp -vr /usr/lib/spa-0.2        ./shared/lib
 cp -vr /usr/lib/alsa-lib       ./shared/lib
 
 # add gpu libs
