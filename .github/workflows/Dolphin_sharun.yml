@@ -93,7 +93,6 @@ jobs:
            libstdc++6 \
            libswscale-dev \
            libsystemd-dev \
-           libudev-dev
            libudev-dev \
            libusb-1.0-0-dev \
            libwayland-dev \
