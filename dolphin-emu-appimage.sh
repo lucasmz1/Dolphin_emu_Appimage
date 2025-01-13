@@ -32,10 +32,10 @@ wget --retry-connrefused --tries=30 "$ICON" -O ./dolphin-emu.png
 wget --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
 chmod +x ./lib4bin
 
-xvfb-run -a -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
+xvfb-run -a -- ./lib4bin -p -v -r -e -s -k /usr/bin/dolphin-*
 
 # for some reason the dir needs a capital S?
-cp -r /usr/local/share/dolphin-emu/sys ./bin/Sys
+cp -r /usr/share/dolphin-emu/sys ./bin/Sys
 
 # Deploy Qt manually xd
 mkdir -p ./shared/lib/qt6/plugins
