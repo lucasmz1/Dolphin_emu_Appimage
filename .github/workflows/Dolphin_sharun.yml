@@ -20,173 +20,51 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build-stable"
-  build-stable:
-    # The type of runner that the job will run on
+  build:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    container: artixlinux/artixlinux:latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
       - name: Prerequisites
         run: |
-         sudo apt update && sudo apt install -y \
-         build-essential \
-         ca-certificates \
-         ccache \
-         cmake \
-         curl \
-         desktop-file-utils \
-         dialog \
-         dpkg \
-         ffmpeg \
-         g++ \
-         g++-11 \
-         gcc \
-         gcc-11 \
-         gettext \
-         git \
-         libao-dev \
-         libasound2-dev \
-         libavcodec-dev \
-         libavdevice-dev \
-         libavformat-dev \
-         libavutil-dev \
-         libbluetooth-dev \
-         libbz2-dev \
-         libc6-dev \
-         libc++abi-dev \
-         libc++-dev \
-         libcurl4-openssl-dev \
-         libevdev-dev \
-         libfmt-dev \
-         libfuse2 \
-         libgl1-mesa-dev \
-         libglu1-mesa-dev \
-         libgtk2.0-dev \
-         libhidapi-dev \
-         liblz4-dev \
-         liblzma-dev \
-         liblzo2-dev \
-         libmbedtls-dev \
-         libminiupnpc-dev \
-         libopus-dev \
-         libpangocairo-1.0-0 \
-         libpipewire-0.3-0 \
-         libpipewire-0.3-modules \
-         libpng-dev \
-         libpugixml-dev \
-         libpulse-dev \
-         libqt6svg6-dev \
-         libreadline-dev \
-         libsdl1.2-dev \
-         libsfml-dev \
-         libspa-0.2-dev \
-         libspa-0.2-modules \
-         libssl-dev \
-         libstdc++6 \
-         libswscale-dev \
-         libsystemd-dev \
-         libudev-dev
-         libudev-dev \
-         libusb-1.0-0-dev \
-         libwayland-dev \
-         libxcb-cursor0 \
-         libxcb-cursor-dev \
-         libxcb-icccm4 \
-         libxcb-image0-dev \
-         libxcb-keysyms1 \
-         libxcb-randr0 \
-         libxcb-render-util0 \
-         libxext-dev \
-         libxi-dev \
-         libxrandr-dev \
-         libzip-dev \
-         libzstd-dev \
-         make \
-         mesa-common-dev \
-         mesa-utils \
-         mesa-vulkan-drivers \
-         ninja-build \
-         p7zip \
-         p7zip-full \
-         pipewire-alsa \
-         pipewire-audio-client-libraries \
-         pkg-config \
-         pulseaudio \
-         qt6-base-private-dev \
-         qt6ct \
-         wget \
-         x11-utils \
-         xvfb \
-         zenity \
-         zlib1g-dev
-         version=$(apt-cache pkgnames | sed -nr 's/^gcc-(([0-9]+\.?)+)$/\1/p' \
-                             | sort -n | tail -n1)
-          echo "The latest available GCC version: $version"
-          sudo apt-get install gcc-$version g++-$version
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$version 60 \
-          --slave   /usr/bin/g++ g++ /usr/bin/g++-$version
-          sudo apt remove --purge llvm-* clang-* -y
-          sudo apt autoremove -y
-          LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
-          wget -q -c "$LIB4BN" ; chmod a+x lib4bin
-          wget -q "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage" -O qtplugin ; chmod a+x qtplugin
-          wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O linuxdeploy ; chmod a+x linuxdeploy
-          wget -q "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool ; chmod a+x appimagetool
-          git clone --filter="blob:none" --depth=1 -b master https://github.com/dolphin-emu/dolphin.git dolphin-emu
-          #export VERSION2=$(git tag | tail -n 1)
-          mkdir lucas/
-          mkdir lucas/usr/
-          mkdir lucas/usr/lib/
-          mkdir -p lucas2/shared/lib/
-          cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 ${{github.workspace}}/lucas2/shared/lib/
-          cp dolphin-emu.desktop dolphin-emu.png lucas2/
-          cp ${{github.workspace}}/files/AppRun lucas2/
-          cd ./dolphin-emu
-          git submodule update --init --recursive
-          [ "${COMMIT:=}" ] && git fetch --unshallow --tags && git checkout "$COMMIT"
-          HEAD="$(git rev-parse --short HEAD)"
-          DATE="$(git show -s --format=%cd --date=format:%Y.%m.%d)"
-          VERSION="${DATE}_$HEAD"
-          #export PATH=$PATH:$( find ${{github.workspace}}/qt/6.7.3/ -type d -printf ":%p" )
-          #export QMAKE="${{github.workspace}}/qt/6.7.3/gcc_64/bin/"
-          #export CMAKE_PREFIX_PATH="${{github.workspace}}/qt/6.7.3/gcc_64/"
-          #export QT_DIR="$QT_DIR:${{github.workspace}}/qt/6.7.3/gcc_64/lib/cmake/Qt6/"
-          mkdir -p "$HOME/.ccache"
-          mkdir Build && cd Build
-          cmake .. -GNinja -DCMAKE_C_COMPILER=gcc-11 -DCMAKE_CXX_COMPILER=g++-11 -DLINUX_LOCAL_DEV=true -DCMAKE_INSTALL_PREFIX="${{github.workspace}}/lucas/usr/"
-          ninja install
-          cd ..
-          cd ..
+          sed -i 's/DownloadUser/#DownloadUser/g' /etc/pacman.conf
+          pacman -Syu --noconfirm base-devel \
+            strace \
+            patchelf \
+            curl \
+            wget \
+            git \
+            artix-archlinux-support \
+            llvm \
+            mesa \
+            xorg-server-xvfb \
+            vulkan-radeon \
+            vulkan-intel \
+            vulkan-nouveau
+
+          pacman-key --init && pacman-key --populate archlinux
+          printf "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n" | tee -a /etc/pacman.conf
+          pacman -Syu --noconfirm zsync \
+            dolphin-emu \
+            pulseaudio \
+            pulseaudio-alsa \
+            pipewire-audio \
+            qt6ct
 
       # Runs a set of commands using the runners shell
       - name: Build appimage
         run: |
-          
-          #export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$( find ${{github.workspace}}/qt/6.7.3/ -type d -printf ":%p" )
-          #echo $LD_LIBRARY_PATH
-          export PATH="$PATH:${{github.workspace}}"
-          cd lucas2/
-          chmod a+x ./AppRun
-          xvfb-run -- lib4bin -p -v -r -e -s -k "${{github.workspace}}/lucas/usr/bin/dolphin-emu-nogui" "${{github.workspace}}/lucas/usr/bin/dolphin-tool" "${{github.workspace}}/lucas/usr/bin/dolphin-emu"
-          ./sharun -g
-          find "${{github.workspace}}/lucas2/shared/lib/home/" -type f | xargs -i -t -exec cp -Lr "${{github.workspace}}/lucas2/shared/lib" 
-          cd ..
-          find . -iname 'Sys' | xargs -i -t -exec cp -r {} ${GITHUB_WORKSPACE}/lucas2/bin/
-          find -iname ${GITHUB_WORKSPACE} 'libxcb-cursor**' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
-          find ${GITHUB_WORKSPACE} -iname 'libqxcb**' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
-          find ${GITHUB_WORKSPACE} -iname 'libQt6XcbQpa.so.6' | xargs -i -t -exec cp -Lr {} ${{github.workspace}}/lucas2/shared/lib/
-          ARCH=x86_64 VERSION=git ./appimagetool -n lucas2/
+          chmod +x ./dolphin-emu-appimage.sh 
+          ./dolphin-emu-appimage.sh
 
       - name: release
         uses: "marvinpinto/action-automatic-releases@6273874b61ebc8c71f1a61b2d98e234cf389b303"
         with:
           title: Continuous Sharun
-          automatic_release_tag: continuous-Sharun
-          prerelease: false
+          automatic_release_tag: continuous-Sharun-Artixlinux
+          prerelease: true
           draft: false
           files: /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/*.AppImage*
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
