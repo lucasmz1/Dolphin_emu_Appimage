@@ -63,8 +63,8 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@6273874b61ebc8c71f1a61b2d98e234cf389b303"
         with:
           title: Continuous Sharun
-          automatic_release_tag: continuous-Sharun
-          prerelease: false
+          automatic_release_tag: continuous-Sharun-Artixlinux
+          prerelease: true
           draft: false
           files: /home/runner/work/Dolphin_emu_Appimage/Dolphin_emu_Appimage/*.AppImage*
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
