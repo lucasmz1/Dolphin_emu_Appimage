@@ -50,7 +50,6 @@ jobs:
             dolphin-emu \
             pulseaudio \
             pulseaudio-alsa \
-            pipewire-audio \
             qt6ct
 
       # Runs a set of commands using the runners shell
