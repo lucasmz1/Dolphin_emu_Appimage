@@ -20,111 +20,76 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build-stable"
-  build-stable:
-    # The type of runner that the job will run on
+  build:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    container: artixlinux/artixlinux:latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
       - name: Prerequisites
         run: |
-          sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
-          sudo apt update
-          sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-          sudo apt update
-          sudo apt install -y \
-           build-essential \
-           ca-certificates \
-           ccache \
-           cmake \
-           curl \
-           desktop-file-utils \
-           dialog \
-           dpkg \
-           ffmpeg \
-           g++ \
-           g++-11 \
-           gcc \
-           gcc-11 \
-           gettext \
-           git \
-           libao-dev \
-           libasound2-dev \
-           libavcodec-dev \
-           libavdevice-dev \
-           libavformat-dev \
-           libavutil-dev \
-           libbluetooth-dev \
-           libbz2-dev \
-           libc6-dev \
-           libc++abi-dev \
-           libc++-dev \
-           libcurl4-openssl-dev \
-           libevdev-dev \
-           libfmt-dev \
-           libfuse2 \
-           libgl1-mesa-dev \
-           libglu1-mesa-dev \
-           libgtk2.0-dev \
-           libhidapi-dev \
-           liblz4-dev \
-           liblzma-dev \
-           liblzo2-dev \
-           libmbedtls-dev \
-           libminiupnpc-dev \
-           libopus-dev \
-           libpangocairo-1.0-0 \
-           libpipewire-0.3-0 \
-           libpipewire-0.3-modules \
-           libpng-dev \
-           libpugixml-dev \
-           libpulse-dev \
-           libqt6svg6-dev \
-           libreadline-dev \
-           libsdl1.2-dev \
-           libsfml-dev \
-           libspa-0.2-dev \
-           libspa-0.2-modules \
-           libssl-dev \
-           libstdc++6 \
-           libswscale-dev \
-           libsystemd-dev \
-           libudev-dev \
-           libusb-1.0-0-dev \
-           libwayland-dev \
-           libxcb-cursor0 \
-           libxcb-cursor-dev \
-           libxcb-icccm4 \
-           libxcb-image0-dev \
-           libxcb-keysyms1 \
-           libxcb-randr0 \
-           libxcb-render-util0 \
-           libxext-dev \
-           libxi-dev \
-           libxrandr-dev \
-           libzip-dev \
-           libzstd-dev \
-           make \
-           mesa-common-dev \
-           mesa-utils \
-           mesa-vulkan-drivers \
-           ninja-build \
-           p7zip \
-           p7zip-full \
-           pipewire-alsa \
-           pipewire-audio-client-libraries \
-           pkg-config \
-           pulseaudio \
-           qt6-base-private-dev \
-           qt6ct \
-           wget \
-           x11-utils \
-           xvfb \
-           zlib1g-dev
+          sed -i 's/DownloadUser/#DownloadUser/g' /etc/pacman.conf
+          pacman -Syu --noconfirm \
+            base-devel 
+            strace 
+            patchelf 
+            curl 
+            wget \
+            git \
+            artix-archlinux-support \
+            llvm \
+            mesa \
+            xorg-server-xvfb \
+            vulkan-radeon \
+            vulkan-intel \
+            vulkan-nouveau
+
+          pacman-key --init && pacman-key --populate archlinux
+          printf "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n" | tee -a /etc/pacman.conf
+          pacman -Syu --noconfirm \
+            zsync \
+            alsa-lib \ 
+            cmake \
+            libevdev \
+            libminiupnpc.so \ 
+            libpulse \
+	          libudev.so \ 
+            ninja \
+            python \
+            qt6-base \
+            qt6ct \
+            qt6-svg \
+            bluez-libs \ 
+            bzip2 \
+            enet \
+            gcc-libs \ 
+            glibc \
+            hidapi \
+            libavcodec.so \
+	          libavformat.so \
+            libavutil.so \
+            libcurl.so \
+            libfmt.so \
+            libgl \
+	          libsfml-network.so \
+            libsfml-system.so \
+            libspng.so \
+            libswscale.so \
+	          libusb-1.0.so \
+            libx11 \
+            libxi \
+            libxrandr \
+            lz4 \
+            lzo \
+            mbedtls2 \
+            pugixml \
+	          sdl2 \
+            sfml \
+            speexdsp \
+            xxhash \
+            xz \
+            zstd
 
           git clone --filter="blob:none" --depth=1 -b master https://github.com/dolphin-emu/dolphin.git dolphin-emu
           cd ./dolphin-emu
