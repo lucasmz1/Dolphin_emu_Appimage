@@ -46,49 +46,48 @@ jobs:
 
           pacman-key --init && pacman-key --populate archlinux
           printf "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n" | tee -a /etc/pacman.conf
-          pacman -Syu --noconfirm \
-            zsync \
-                alsa-lib \ 
-                cmake \
-                libevdev \
-                libminiupnpc.so \ 
-                libpulse \
-                libudev.so \ 
-                ninja \
-                python \
-                qt6-base \
-                qt6ct \
-                qt6-svg \
-                bluez-libs \ 
-                bzip2 \
-                enet \
-                gcc-libs \ 
-                glibc \
-                hidapi \
-                libavcodec.so \
-                libavformat.so \
-                libavutil.so \
-                libcurl.so \
-                libfmt.so \
-                libgl \
-                libsfml-network.so \
-                libsfml-system.so \
-                libspng.so \
-                libswscale.so \
-                libusb-1.0.so \
-                libx11 \
-                libxi \
-                libxrandr \
-                lz4 \
-                lzo \
-                mbedtls2 \
-                pugixml \
-                sdl2 \
-                sfml \
-                speexdsp \
-                xxhash \
-                xz \
-                zstd
+          pacman -Syu --noconfirm zsync \
+            alsa-lib \ 
+            cmake \
+            libevdev \
+            libminiupnpc.so \ 
+            libpulse \
+            libudev.so \ 
+            ninja \
+            python \
+            qt6-base \
+            qt6ct \
+            qt6-svg \
+            bluez-libs \ 
+            bzip2 \
+            enet \
+            gcc-libs \ 
+            glibc \
+            hidapi \
+            libavcodec.so \
+            libavformat.so \
+            libavutil.so \
+            libcurl.so \
+            libfmt.so \
+            libgl \
+            libsfml-network.so \
+            libsfml-system.so \
+            libspng.so \
+            libswscale.so \
+            libusb-1.0.so \
+            libx11 \
+            libxi \
+            libxrandr \
+            lz4 \
+            lzo \
+            mbedtls2 \
+            pugixml \
+            sdl2 \
+            sfml \
+            speexdsp \
+            xxhash \
+            xz \
+            zstd
 
           git clone --filter="blob:none" --depth=1 -b master https://github.com/dolphin-emu/dolphin.git dolphin-emu
           cd ./dolphin-emu
