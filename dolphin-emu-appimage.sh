@@ -10,7 +10,7 @@ LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bi
 ICON="https://github.com/dolphin-emu/dolphin/blob/master/Data/dolphin-emu.png?raw=true"
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
-export VERSION="$(pacman -Q dolphin-emu | awk 'NR==1 {print $2; exit}')"
+export VERSION="$(pacman -Q dolphin-emu | awk 'NR==1 {print $2; exit}' | tr ':' '.')"
 echo "$VERSION" > ~/version
 
 # Prepare AppDir
