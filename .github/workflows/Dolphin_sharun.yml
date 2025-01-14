@@ -67,13 +67,13 @@ jobs:
          echo "APP_VERSION=$(cat ~/version)" >> "${GITHUB_ENV}"
       
       - name: Upload artifact
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.6.0
         with:
           name: AppImage
           path: 'dist'
           
       - name: Upload version file
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.6.0
         with:
          name: version
          path: ~/version
