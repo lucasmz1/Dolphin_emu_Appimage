@@ -37,7 +37,8 @@ chmod +x ./lib4bin
 
 xvfb-run -a -- ./lib4bin -p -v -r -e -s -k /usr/bin/dolphin-*
 
-# for some reason the dir needs a capital S?
+# when compiled portable this directory needs a capital S
+# this is not needed since we are not using a binary that was compiled portable
 cp -r /usr/share/dolphin-emu/sys ./bin/Sys
 
 # Deploy Qt manually xd
@@ -79,8 +80,12 @@ git clone https://github.com/fritzw/ld-preload-open.git preload.tmp
 ( cd preload.tmp && make all && mv ./path-mapping.so ../ )
 rm -rf ./preload.tmp
 
-echo 'PATH_MAPPING="/usr/share/dolphin-emu/sys:${SHARUN_DIR}/bin/Sys"
+echo 'PATH_MAPPING="/usr/share/dolphin-emu/sys:${SHARUN_DIR}/bin/Sys:/usr/share/dolphin-emu//../locale:${SHARUN_DIR}/share/locale"
 LD_PRELOAD=${SHARUN_DIR}/path-mapping.so' > ./.env
+
+# copy locales, for some reason the dolphin binary tries to look into an invalid /usr/share/dolphin-emu//../locale path
+cp -r /usr/share/locale ./share
+find ./share/locale -type f ! -name '*dolphin*' -delete
 
 # Prepare sharun
 ln ./sharun ./AppRun
