@@ -85,6 +85,7 @@ LD_PRELOAD=${SHARUN_DIR}/path-mapping.so' > ./.env
 
 # copy locales, for some reason the dolphin binary tries to look into an invalid /usr/share/dolphin-emu//../locale path
 cp -r /usr/share/locale ./share
+find ./share/locale -type f ! -name '*dolphin*' -delete
 
 # Prepare sharun
 ln ./sharun ./AppRun
