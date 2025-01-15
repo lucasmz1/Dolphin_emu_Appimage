@@ -46,6 +46,10 @@ jobs:
 
           pacman-key --init && pacman-key --populate archlinux
           printf "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n" | tee -a /etc/pacman.conf
+
+          cat /etc/pacman.conf
+          sudo sed -i 's/NoExtract/#NoExtract/g' /etc/pacman.conf
+
           pacman -Syu --noconfirm zsync \
             dolphin-emu \
             pulseaudio \
