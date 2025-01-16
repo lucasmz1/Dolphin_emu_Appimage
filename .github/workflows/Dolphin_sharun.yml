@@ -31,6 +31,7 @@ jobs:
         run: |
           sed -i 's/DownloadUser/#DownloadUser/g' /etc/pacman.conf
           pacman -Syu --noconfirm base-devel \
+            cmake \
             strace \
             patchelf \
             curl \
@@ -60,6 +61,14 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build appimage
         run: |
+          git clone https://github.com/dolphin-emu/dolphin.git dolphin
+          ( cd dolphin && mkdir build && cd build
+            git submodule update --init --recursive
+            cmake .. -DLINUX_LOCAL_DEV=true
+            sudo make install
+            sudo cp -r ../Data/Sys /usr/local/bin
+          )
+
           chmod +x ./dolphin-emu-appimage.sh 
           ./dolphin-emu-appimage.sh
           mkdir dist
@@ -113,7 +122,7 @@ jobs:
           with:
             name: "Dolphin Emulator AppImage ${{ env.APP_VERSION }}"
             tag_name: "${{ env.APP_VERSION}}"
-            prerelease: false
+            prerelease: true
             draft: false
             generate_release_notes: false
             make_latest: true
@@ -132,7 +141,7 @@ jobs:
           with:
             name: "Snapshot ${{ env.APP_VERSION }}"
             tag_name: "${{ env.SNAPSHOT_TAG }}"
-            prerelease: false
+            prerelease: true
             draft: false
             generate_release_notes: false
             make_latest: false
