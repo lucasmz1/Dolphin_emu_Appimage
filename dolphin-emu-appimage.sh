@@ -75,17 +75,10 @@ cp -vr /usr/share/glvnd          ./share
 cp -vr /usr/share/vulkan/icd.d   ./share/vulkan
 sed -i 's|/usr/lib||g;s|/.*-linux-gnu||g;s|"/|"|g' ./share/vulkan/icd.d/*
 
-# Fix dolphin having a full hardcoded path /usr/share/dolphin-emu/sys
-git clone https://github.com/fritzw/ld-preload-open.git preload.tmp
-( cd preload.tmp && make all && mv ./path-mapping.so ../ )
-rm -rf ./preload.tmp
-
-echo 'PATH_MAPPING="/usr/share/dolphin-emu/sys:${SHARUN_DIR}/bin/Sys:/usr/share/dolphin-emu//../locale:${SHARUN_DIR}/share/locale"
-LD_PRELOAD=${SHARUN_DIR}/path-mapping.so' > ./.env
-
-# copy locales, for some reason the dolphin binary tries to look into an invalid /usr/share/dolphin-emu//../locale path
-cp -r /usr/local/share/locale ./share
-#find ./share/locale -type f ! -name '*dolphin*' -delete
+# copy locales, the dolphin binary expects them here
+mkdir -p ./Source/Core
+cp -r /usr/local/bin/DolphinQt ./Source/Core
+find ./Source/Core/DolphinQt -type f ! -name 'dolphin-emu.mo' -delete
 
 # Prepare sharun
 ln ./sharun ./AppRun
