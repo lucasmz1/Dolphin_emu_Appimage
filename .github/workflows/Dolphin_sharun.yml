@@ -65,6 +65,7 @@ jobs:
           ( cd dolphin && mkdir build && cd build
             git submodule update --init --recursive
             cmake .. -DLINUX_LOCAL_DEV=true
+            make -j $(nproc)
             sudo make install
             sudo cp -r ../Data/Sys /usr/local/bin
             sudo cp -r ./Source/Core/DolphinQt /usr/local/bin
