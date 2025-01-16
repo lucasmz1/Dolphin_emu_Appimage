@@ -35,11 +35,11 @@ wget --retry-connrefused --tries=30 "$ICON" -O ./dolphin-emu.png
 wget --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
 chmod +x ./lib4bin
 
-xvfb-run -a -- ./lib4bin -p -v -r -e -s -k /usr/bin/dolphin-*
+xvfb-run -a -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
 
 # when compiled portable this directory needs a capital S
 # this is not needed since we are not using a binary that was compiled portable
-cp -r /usr/share/dolphin-emu/sys ./bin/Sys
+cp -rv /usr/local/bin/Sys ./bin/Sys
 
 # Deploy Qt manually xd
 mkdir -p ./shared/lib/qt6/plugins
@@ -84,8 +84,8 @@ echo 'PATH_MAPPING="/usr/share/dolphin-emu/sys:${SHARUN_DIR}/bin/Sys:/usr/share/
 LD_PRELOAD=${SHARUN_DIR}/path-mapping.so' > ./.env
 
 # copy locales, for some reason the dolphin binary tries to look into an invalid /usr/share/dolphin-emu//../locale path
-cp -r /usr/share/locale ./share
-find ./share/locale -type f ! -name '*dolphin*' -delete
+cp -r /usr/local/share/locale ./share
+#find ./share/locale -type f ! -name '*dolphin*' -delete
 
 # Prepare sharun
 ln ./sharun ./AppRun
