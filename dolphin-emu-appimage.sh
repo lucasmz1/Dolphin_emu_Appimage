@@ -4,14 +4,12 @@ set -eu
 
 export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH="$(uname -m)"
-APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-$ARCH.AppImage"
 LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
-#DESKTOP="https://raw.githubusercontent.com/dolphin-emu/dolphin/refs/heads/master/Data/dolphin-emu.desktop" @ This is insanely outdated lmao
+#DESKTOP="https://raw.githubusercontent.com/dolphin-emu/dolphin/refs/heads/master/Data/dolphin-emu.desktop" # This is insanely outdated lmao
 ICON="https://github.com/dolphin-emu/dolphin/blob/master/Data/dolphin-emu.png?raw=true"
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
-
-export VERSION="$(pacman -Q dolphin-emu | awk 'NR==1 {print $2; exit}' | tr ':' '.')"
-echo "$VERSION" > ~/version
+URUNTIME=$(wget -q https://api.github.com/repos/VHSgunzo/uruntime/releases -O - \
+	| sed 's/[()",{} ]/\n/g' | grep -oi "https.*appimage.*dwarfs.*$ARCH$" | head -1)
 
 # Prepare AppDir
 mkdir -p ./AppDir && cd ./AppDir
@@ -35,11 +33,11 @@ wget --retry-connrefused --tries=30 "$ICON" -O ./dolphin-emu.png
 wget --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
 chmod +x ./lib4bin
 
-xvfb-run -a -- ./lib4bin -p -v -r -e -s -k /usr/bin/dolphin-*
+xvfb-run -a -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
 
 # when compiled portable this directory needs a capital S
 # this is not needed since we are not using a binary that was compiled portable
-cp -r /usr/share/dolphin-emu/sys ./bin/Sys
+cp -rv /usr/local/bin/Sys ./bin/Sys
 
 # Deploy Qt manually xd
 mkdir -p ./shared/lib/qt6/plugins
@@ -75,30 +73,39 @@ cp -vr /usr/share/glvnd          ./share
 cp -vr /usr/share/vulkan/icd.d   ./share/vulkan
 sed -i 's|/usr/lib||g;s|/.*-linux-gnu||g;s|"/|"|g' ./share/vulkan/icd.d/*
 
-# Fix dolphin having a full hardcoded path /usr/share/dolphin-emu/sys
-git clone https://github.com/fritzw/ld-preload-open.git preload.tmp
-( cd preload.tmp && make all && mv ./path-mapping.so ../ )
-rm -rf ./preload.tmp
-
-echo 'PATH_MAPPING="/usr/share/dolphin-emu/sys:${SHARUN_DIR}/bin/Sys:/usr/share/dolphin-emu//../locale:${SHARUN_DIR}/share/locale"
-LD_PRELOAD=${SHARUN_DIR}/path-mapping.so' > ./.env
-
-# copy locales, for some reason the dolphin binary tries to look into an invalid /usr/share/dolphin-emu//../locale path
-cp -r /usr/share/locale ./share
-find ./share/locale -type f ! -name '*dolphin*' -delete
+# copy locales, the dolphin binary expects them here
+mkdir -p ./Source/Core
+cp -r /usr/local/bin/DolphinQt ./Source/Core
+find ./Source/Core/DolphinQt -type f ! -name 'dolphin-emu.mo' -delete
 
 # Prepare sharun
 ln ./sharun ./AppRun
 ./sharun -g
+
+# get version from dolphin
+export VERSION="$(xvfb-run -a -- ./AppRun --version 2>/dev/null | awk 'NR==1 {print $2; exit}')"
+echo "$VERSION" > ~/version
+
+# MAKE APPIMAGE WITH URUNTIME
 cd ..
+wget -q "$URUNTIME" -O ./uruntime
+chmod +x ./uruntime
 
-# Make AppImage with the static appimage runtime (removes libfuse2 dependency).
-wget --retry-connrefused --tries=30 "$APPIMAGETOOL" -O ./appimagetool
-chmod +x ./appimagetool
+#Add udpate info to runtime
+echo "Adding update information \"$UPINFO\" to runtime..."
+printf "$UPINFO" > data.upd_info
+llvm-objcopy --update-section=.upd_info=data.upd_info \
+	--set-section-flags=.upd_info=noload,readonly ./uruntime
+printf 'AI\x02' | dd of=./uruntime bs=1 count=3 seek=8 conv=notrunc
 
-./appimagetool -n -u "$UPINFO" AppDir/
+echo "Generating AppImage..."
+./uruntime --appimage-mkdwarfs -f \
+	--set-owner 0 --set-group 0 \
+	--no-history --no-create-timestamp \
+	--compression zstd:level=22 -S24 -B16 \
+	--header uruntime \
+	-i ./AppDir -o Dolphin_Emulator-"$VERSION"-anylinux-"$ARCH".AppImage
 
-echo "$PWD"
-ls .
-
-echo "All done!"
+echo "Generating zsync file..."
+zsyncmake *.AppImage -u *.AppImage
+echo "All Done!"

@@ -6,7 +6,7 @@ name: Sharun CI
 on:
   # Build at 00:00 on every 12th day-of-month.
   schedule:
-    - cron: "0 0 */6 * *"
+    - cron: "0 0 */10 * *"
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ main ]
@@ -31,6 +31,7 @@ jobs:
         run: |
           sed -i 's/DownloadUser/#DownloadUser/g' /etc/pacman.conf
           pacman -Syu --noconfirm base-devel \
+            cmake \
             strace \
             patchelf \
             curl \
@@ -58,11 +59,25 @@ jobs:
             qt6ct
 
       # Runs a set of commands using the runners shell
-      - name: Build appimage
+      - name: Build Dolphin
+        run: |
+          git clone https://github.com/dolphin-emu/dolphin.git dolphin
+          ( cd dolphin && mkdir build && cd build
+            git submodule update --init --recursive
+            cmake .. -DLINUX_LOCAL_DEV=true
+            make -j $(nproc)
+            sudo make install
+            sudo cp -r ../Data/Sys /usr/local/bin
+            sudo cp -r ./Source/Core/DolphinQt /usr/local/bin
+          )
+
+      - name: Make AppImage
         run: |
           chmod +x ./dolphin-emu-appimage.sh 
           ./dolphin-emu-appimage.sh
           mkdir dist
+          echo "$PWD"
+          ls .
           mv *.AppImage* dist/
 
       - name: Check version file
