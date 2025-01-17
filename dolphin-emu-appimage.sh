@@ -4,11 +4,12 @@ set -eu
 
 export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH="$(uname -m)"
-APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-$ARCH.AppImage"
 LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
-#DESKTOP="https://raw.githubusercontent.com/dolphin-emu/dolphin/refs/heads/master/Data/dolphin-emu.desktop" @ This is insanely outdated lmao
+#DESKTOP="https://raw.githubusercontent.com/dolphin-emu/dolphin/refs/heads/master/Data/dolphin-emu.desktop" # This is insanely outdated lmao
 ICON="https://github.com/dolphin-emu/dolphin/blob/master/Data/dolphin-emu.png?raw=true"
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
+URUNTIME=$(wget -q https://api.github.com/repos/VHSgunzo/uruntime/releases -O - \
+	| sed 's/[()",{} ]/\n/g' | grep -oi "https.*appimage.*dwarfs.*$ARCH$" | head -1)
 
 export VERSION="$(pacman -Q dolphin-emu | awk 'NR==1 {print $2; exit}' | tr ':' '.')"
 echo "$VERSION" > ~/version
@@ -83,15 +84,30 @@ find ./Source/Core/DolphinQt -type f ! -name 'dolphin-emu.mo' -delete
 # Prepare sharun
 ln ./sharun ./AppRun
 ./sharun -g
+
+# MAKE APPIMAGE WITH URUNTIME
 cd ..
+wget -q "$URUNTIME" -O ./uruntime
+chmod +x ./uruntime
 
-# Make AppImage with the static appimage runtime (removes libfuse2 dependency).
-wget --retry-connrefused --tries=30 "$APPIMAGETOOL" -O ./appimagetool
-chmod +x ./appimagetool
+#Add udpate info to runtime
+echo "Adding update information \"$UPINFO\" to runtime..."
+printf "$UPINFO" > data.upd_info
+llvm-objcopy --update-section=.upd_info=data.upd_info \
+	--set-section-flags=.upd_info=noload,readonly ./uruntime
+printf 'AI\x02' | dd of=./uruntime bs=1 count=3 seek=8 conv=notrunc
 
-./appimagetool -n -u "$UPINFO" AppDir/
+echo "Generating AppImage..."
+./uruntime --appimage-mkdwarfs -f \
+	--set-owner 0 --set-group 0 \
+	--no-history --no-create-timestamp \
+	--compression zstd:level=22 -S24 -B16 \
+	--header uruntime \
+	-i ./AppDir -o Dolphin_Emulator-"$VERSION"-anylinux-"$ARCH".AppImage
 
-echo "$PWD"
-ls .
+echo "Generating zsync file..."
+zsyncmake *.AppImage -u *.AppImage
 
-echo "All done!"
+mv ./*.AppImage* ../
+cd ..
+echo "All Done!"
