@@ -11,9 +11,6 @@ UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARC
 URUNTIME=$(wget -q https://api.github.com/repos/VHSgunzo/uruntime/releases -O - \
 	| sed 's/[()",{} ]/\n/g' | grep -oi "https.*appimage.*dwarfs.*$ARCH$" | head -1)
 
-export VERSION="$(pacman -Q dolphin-emu | awk 'NR==1 {print $2; exit}' | tr ':' '.')"
-echo "$VERSION" > ~/version
-
 # Prepare AppDir
 mkdir -p ./AppDir && cd ./AppDir
 
@@ -84,6 +81,10 @@ find ./Source/Core/DolphinQt -type f ! -name 'dolphin-emu.mo' -delete
 # Prepare sharun
 ln ./sharun ./AppRun
 ./sharun -g
+
+# get version from dolphin
+export VERSION="$(./AppRun --version 2>/dev/null | awk 'NR==1 {print $2; exit}')"
+echo "$VERSION" > ~/version
 
 # MAKE APPIMAGE WITH URUNTIME
 cd ..
