@@ -36,7 +36,6 @@ chmod +x ./lib4bin
 xvfb-run -a -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
 
 # when compiled portable this directory needs a capital S
-# this is not needed since we are not using a binary that was compiled portable
 cp -rv /usr/local/bin/Sys ./bin/Sys
 
 # Deploy Qt manually xd
