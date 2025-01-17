@@ -76,6 +76,8 @@ jobs:
           chmod +x ./dolphin-emu-appimage.sh 
           ./dolphin-emu-appimage.sh
           mkdir dist
+          ls .
+          find / -type f -name '*.AppImage*'
           mv *.AppImage* dist/
 
       - name: Check version file
