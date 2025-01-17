@@ -6,7 +6,7 @@ name: Sharun CI
 on:
   # Build at 00:00 on every 12th day-of-month.
   schedule:
-    - cron: "0 0 */6 * *"
+    - cron: "0 0 */10 * *"
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ main ]
@@ -128,7 +128,7 @@ jobs:
           with:
             name: "Dolphin Emulator AppImage ${{ env.APP_VERSION }}"
             tag_name: "${{ env.APP_VERSION}}"
-            prerelease: true
+            prerelease: false
             draft: false
             generate_release_notes: false
             make_latest: true
@@ -147,7 +147,7 @@ jobs:
           with:
             name: "Snapshot ${{ env.APP_VERSION }}"
             tag_name: "${{ env.SNAPSHOT_TAG }}"
-            prerelease: true
+            prerelease: false
             draft: false
             generate_release_notes: false
             make_latest: false
