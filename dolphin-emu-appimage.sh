@@ -83,7 +83,7 @@ ln ./sharun ./AppRun
 ./sharun -g
 
 # get version from dolphin
-export VERSION="$(./AppRun --version 2>/dev/null | awk 'NR==1 {print $2; exit}')"
+export VERSION="$(xvfb-run -a -- ./AppRun --version 2>/dev/null | awk 'NR==1 {print $2; exit}')"
 echo "$VERSION" > ~/version
 
 # MAKE APPIMAGE WITH URUNTIME
