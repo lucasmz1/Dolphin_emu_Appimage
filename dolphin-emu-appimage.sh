@@ -32,50 +32,30 @@ wget --retry-connrefused --tries=30 "$ICON" -O ./dolphin-emu.png
 # Bundle all libs
 wget --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
 chmod +x ./lib4bin
-
-xvfb-run -a -- ./lib4bin -p -v -r -e -s -k /usr/local/bin/dolphin-*
-
-# when compiled portable this directory needs a capital S
-cp -rv /usr/local/bin/Sys ./bin/Sys
-
-# Deploy Qt manually xd
-mkdir -p ./shared/lib/qt6/plugins
-cp -vr /usr/lib/qt6/plugins/iconengines       ./shared/lib/qt6/plugins
-cp -vr /usr/lib/qt6/plugins/imageformats      ./shared/lib/qt6/plugins
-cp -vr /usr/lib/qt6/plugins/platforms         ./shared/lib/qt6/plugins
-cp -vr /usr/lib/qt6/plugins/platformthemes    ./shared/lib/qt6/plugins || true
-cp -vr /usr/lib/qt6/plugins/styles            ./shared/lib/qt6/plugins
-cp -vr /usr/lib/qt6/plugins/xcbglintegrations ./shared/lib/qt6/plugins
-cp -vr /usr/lib/qt6/plugins/wayland-*         ./shared/lib/qt6/plugins || true
-ldd ./shared/lib/qt6/plugins/*/* 2>/dev/null \
-  | awk -F"[> ]" '{print $4}' | xargs -I {} cp -nv {} ./shared/lib || true
-
-# Bundle pipewire and alsa
-cp -vr /usr/lib/pipewire-0.3   ./shared/lib
-cp -vr /usr/lib/spa-0.2        ./shared/lib
-cp -vr /usr/lib/alsa-lib       ./shared/lib
-
-# add gpu libs
-cp -vr /usr/lib/libGLX*        ./shared/lib || true
-cp -vr /usr/lib/libEGL*        ./shared/lib || true
-cp -vr /usr/lib/dri            ./shared/lib
-cp -vn /usr/lib/libvulkan*     ./shared/lib
-ldd ./shared/lib/dri/* \
-	./shared/lib/libvulkan* \
-	./shared/lib/libEGL* \
-	./shared/lib/libGLX* 2>/dev/null \
-	| awk -F"[> ]" '{print $4}' | xargs -I {} cp -nv {} ./shared/lib || true
-
-# Bunble opengl and vulkan share files
-mkdir -p ./share/vulkan
-cp -vr /usr/share/glvnd          ./share
-cp -vr /usr/share/vulkan/icd.d   ./share/vulkan
-sed -i 's|/usr/lib||g;s|/.*-linux-gnu||g;s|"/|"|g' ./share/vulkan/icd.d/*
+xvfb-run -a -- ./lib4bin -p -v -r -e -s -k \
+	/usr/local/bin/dolphin-* \
+	/usr/lib/libGLX* \
+	/usr/lib/libEGL* \
+	/usr/lib/dri/* \
+	/usr/lib/libvulkan* \
+	/usr/lib/qt6/plugins/iconengines/* \
+	/usr/lib/qt6/plugins/imageformats/* \
+	/usr/lib/qt6/plugins/platforms/* \
+	/usr/lib/qt6/plugins/platformthemes/* \
+	/usr/lib/qt6/plugins/styles/* \
+	/usr/lib/qt6/plugins/xcbglintegrations/* \
+	/usr/lib/qt6/plugins/wayland-*/* \
+	/usr/lib/pipewire-0.3/* \
+	/usr/lib/spa-0.2/*/* \
+	/usr/lib/alsa-lib/*
 
 # copy locales, the dolphin binary expects them here
 mkdir -p ./Source/Core
 cp -r /usr/local/bin/DolphinQt ./Source/Core
 find ./Source/Core/DolphinQt -type f ! -name 'dolphin-emu.mo' -delete
+
+# when compiled portable this directory needs a capital S
+cp -rv /usr/local/bin/Sys ./bin/Sys
 
 # Prepare sharun
 ln ./sharun ./AppRun
