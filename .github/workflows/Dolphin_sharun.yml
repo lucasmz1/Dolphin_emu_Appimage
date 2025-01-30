@@ -58,6 +58,13 @@ jobs:
             pipewire-audio \
             qt6ct
 
+      - name: Install debloated llvm-libs
+        run: |
+          LLVM="$(wget https://api.github.com/repos/Samueru-sama/llvm-libs-debloated/releases -O - \
+            | sed 's/[()",{} ]/\n/g' | grep -oi "https.*minimal.pkg.tar.zst$" | head -1)"
+          wget "$LLVM" -O ./llvm-libs.pkg.tar.zst
+          pacman -U --noconfirm ./llvm-libs.pkg.tar.zst
+
       # Runs a set of commands using the runners shell
       - name: Build Dolphin
         run: |
