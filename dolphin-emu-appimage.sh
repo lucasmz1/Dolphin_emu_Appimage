@@ -28,6 +28,7 @@ Comment=A Wii/GameCube Emulator
 X-AppImage-Version=5.0-16793' > ./dolphin-emu.desktop
 
 wget --retry-connrefused --tries=30 "$ICON" -O ./dolphin-emu.png
+ln -s ./dolphin-emu.png ./.DirIcon
 
 # Bundle all libs
 wget --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
