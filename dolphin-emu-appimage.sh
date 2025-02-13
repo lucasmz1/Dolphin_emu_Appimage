@@ -29,7 +29,7 @@ Comment=A Wii/GameCube Emulator
 X-AppImage-Version=5.0-16793' > ./dolphin-emu.desktop
 
 wget --retry-connrefused --tries=30 "$ICON" -O ./dolphin-emu.png
-ln -s ./dolphin-emu.png ./.DirIcon
+ln -s dolphin-emu.png ./.DirIcon
 
 # Bundle all libs
 wget --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
@@ -96,6 +96,5 @@ chmod +x ./appimagetool
 ./appimagetool --comp zstd \
 	--mksquashfs-opt -Xcompression-level --mksquashfs-opt 22 \
 	-n -u "$UPINFO" "$PWD"/AppDir "$PWD"/Dolphin_Emulator-"$VERSION"-anylinux.squashfs-"$ARCH".AppImage
-
 
 echo "All Done!"
